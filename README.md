@@ -17,5 +17,5 @@ Each variable has a comment to what is can be used for in the [values.yaml](./va
 
 Besides that there are some example files in [examples/](./examples/).
 
-## Configure OICD
-This chart allows you to configure login using OICD but just as a reminder, this feature isn't available in the basic license.
+## Configure OIDC
+This chart allows you to configure login using OIDC but just as a reminder, this feature isn't available in the basic license.
