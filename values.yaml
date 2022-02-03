@@ -1,0 +1,196 @@
+# Default values for eck-resources.
+# This is a YAML-formatted file.
+
+# fullnameOverride: eck
+
+## elasticsearch values
+elasticsearch:
+  ## controls if it will generate the ES resources
+  enabled: false
+  ## allow you to create local user
+  credentials:
+    enabled: false
+    username: elasticsearch
+    password: password
+    ## create local user init container resources
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 100m
+        ephemeral-storage: 100Mi
+      limits:
+        memory: 400Mi
+        cpu: 200m
+        ephemeral-storage: 200Mi
+  ## values to be stored in keystore
+  # secretConfig:
+  #   xpack.security.authc.realms.oidc.dex.rp.client_secret: test
+  ## init container that store values in keystore resources
+  secretResources:
+    requests:
+      memory: 200Mi
+      cpu: 100m
+      ephemeral-storage: 100Mi
+    limits:
+      memory: 400Mi
+      cpu: 200m
+      ephemeral-storage: 200Mi
+  ## for doc about the `auth` specs check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-elasticsearch-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-elasticsearch-v1-auth
+  # auth:
+  ## elasticsearch version
+  version: 7.16.3
+  ## for doc about the `http` specs check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-common-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-common-v1-httpconfig
+  # http:
+  ## override default elasticsearch image
+  # image:
+  ## config that will be added to all nodeSets elemets
+  config:
+    node.store.allow_mmap: false
+  #   ingest.geoip.downloader.enabled: false
+  #   xpack.security.http.ssl.enabled: true
+  ## for doc about `nodeSets` check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-elasticsearch-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-elasticsearch-v1-nodeset
+  nodeSets:
+    - name: default
+      count: 1
+      ## nodeSet element specific config
+      config:
+        node:
+          roles: ["master","data","ingest"]
+  ## for doc about `podDisruptionBudget` check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-common-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-common-v1-poddisruptionbudgettemplate
+  # podDisruptionBudget:
+  ## for doc about `secureSettings` check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-common-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-common-v1-secretsource
+  # secureSettings:
+  ## for doc about `updateStrategy` check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-elasticsearch-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-elasticsearch-v1-updatestrategy
+  # updateStrategy:
+  ## even none of the above works for you `extraSpec` lets you pass whatever config you want to the elasticsearch resource
+  # extraSpec:
+
+## kibana values
+kibana:
+  ## controls if it will generate the kibana resources
+  enabled: false
+  ## kibana version
+  version: 7.16.3
+  ## number of replicas
+  count: 1
+  ## for doc about the `http` specs check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-common-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-common-v1-httpconfig
+  # http:
+  ## points to an external elasticsearch
+  # externalElasticsearchRef:
+  ## pod resources
+  resources:
+    requests:
+      cpu: "1"
+      ephemeral-storage: 100Mi
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      ephemeral-storage: 100Mi
+      memory: "1Gi"
+  ## ingress config
+  ingress:
+    enabled: false
+    port: 5601
+    annotations:
+      cert-manager.io/cluster-issuer: production-certs
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    hosts:
+    - kibana.example.com
+    tls:
+    - secretName: kibana-server-tls
+      hosts:
+      - kibana.example.com
+    routePrefix: /
+  ## for doc about the specs check https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-api-common-k8s-elastic-co-v1.html#k8s-api-github-com-elastic-cloud-on-k8s-pkg-apis-common-v1-config
+  config:
+    server.publicBaseUrl: https://kibana.example.com
+  ## even none of the above works for you `extraSpec` lets you pass whatever config you want to the elasticsearch resource
+  # extraSpec:
+
+## beats values
+beat:
+  default:
+    type: filebeat
+    version: 7.16.3
+  ## Can define multiple beats, no specified values will use the default above
+  instances: []
+  # instances:
+  # - name: filebeat1
+  #   type: filebeat
+  #   elasticsearchRef:
+  #     name: elasticsearch
+  #   kibanaRef:
+  #     name: kibana
+  #   config:
+  #     filebeat:
+  #       autodiscover:
+  #         providers:
+  #         - type: kubernetes
+  #           node: ${NODE_NAME}
+  #           hints:
+  #             enabled: true
+  #             default_config:
+  #               type: container
+  #               paths:
+  #               - /var/log/containers/*${data.kubernetes.container.id}.log
+  #     processors:
+  #     - add_cloud_metadata: {}
+  #     - add_host_metadata: {}
+  #   ## Can be a daemonSet or deployment
+  #   daemonSet: #deployment:
+  #     podTemplate:
+  #       spec:
+  #         serviceAccountName: filebeat1
+  #         automountServiceAccountToken: true
+  #         terminationGracePeriodSeconds: 30
+  #         dnsPolicy: ClusterFirstWithHostNet
+  #         hostNetwork: true # Allows to provide richer host metadata
+  #         containers:
+  #         - name: filebeat
+  #           securityContext:
+  #             runAsUser: 0
+  #           volumeMounts:
+  #           - name: varlogcontainers
+  #             mountPath: /var/log/containers
+  #           - name: varlogpods
+  #             mountPath: /var/log/pods
+  #           - name: varlibdockercontainers
+  #             mountPath: /var/lib/docker/containers
+  #           env:
+  #             - name: NODE_NAME
+  #               valueFrom:
+  #                 fieldRef:
+  #                   fieldPath: spec.nodeName
+  #         volumes:
+  #         - name: varlogcontainers
+  #           hostPath:
+  #             path: /var/log/containers
+  #         - name: varlogpods
+  #           hostPath:
+  #             path: /var/log/pods
+  #         - name: varlibdockercontainers
+  #           hostPath:
+  #             path: /var/lib/docker/containers
+  #   # Can be a deployment or daemonSet
+  #   deployment:
+  #     podTemplate:
+  #       spec:
+  #         containers:
+  #         - name: test
+
+
+## serviceAccount values
+serviceAccounts: []
+# serviceAccounts:
+# - name: filebeat1
+#   rules:
+#   - apiGroups: [""] # "" indicates the core API group
+#     resources:
+#     - namespaces
+#     - pods
+#     - nodes
+#     verbs:
+#     - get
+#     - watch
+#     - list

@@ -1,0 +1,77 @@
+{{- if and .Values.kibana.enabled .Values.kibana.ingress.enabled -}}
+  {{- $pathType := .Values.kibana.ingress.pathType | default "ImplementationSpecific" -}}
+  {{- $serviceName := include "eck-resources.kibana.serviceName" . -}}
+  {{- $servicePort := .Values.kibana.ingress.port -}}
+  {{- $routePrefix := list .Values.kibana.ingress.routePrefix -}}
+  {{- $paths := .Values.kibana.ingress.paths | default $routePrefix -}}
+  {{- $apiIsStable := eq (include "eck-resources.ingress.isStable" .) "true" -}}
+  {{- $ingressSupportsPathType := eq (include "eck-resources.ingress.supportsPathType" .) "true" -}}
+apiVersion: {{ include "eck-resources.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+{{- if .Values.kibana.ingress.annotations }}
+  annotations:
+{{ toYaml .Values.kibana.ingress.annotations | indent 4 }}
+{{- end }}
+  name: {{ include "eck-resources.fullname" . }}-kibana
+  namespace: {{ template "eck-resources.namespace" . }}
+  labels:
+    app: {{ template "eck-resources.name" . }}-kibana
+{{ include "eck-resources.labels" . | indent 4 }}
+{{- if .Values.kibana.ingress.labels }}
+{{ toYaml .Values.kibana.ingress.labels | indent 4 }}
+{{- end }}
+spec:
+  {{- if $apiIsStable }}
+  {{- if .Values.kibana.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.kibana.ingress.ingressClassName }}
+  {{- end }}
+  {{- end }}
+  rules:
+  {{- if .Values.kibana.ingress.hosts }}
+  {{- range $host := .Values.kibana.ingress.hosts }}
+    - host: {{ tpl $host $ }}
+      http:
+        paths:
+  {{- range $p := $paths }}
+          - path: {{ tpl $p $ }}
+            {{- if and $pathType $ingressSupportsPathType }}
+            pathType: {{ $pathType }}
+            {{- end }}
+            backend:
+              {{- if $apiIsStable }}
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $servicePort }}
+              {{- else }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+    {{- end }}
+    {{- end -}}
+  {{- end -}}
+  {{- else }}
+    - http:
+        paths:
+  {{- range $p := $paths }}
+          - path: {{ tpl $p $ }}
+            {{- if and $pathType $ingressSupportsPathType }}
+            pathType: {{ $pathType }}
+            {{- end }}
+            backend:
+              {{- if $apiIsStable }}
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $servicePort }}
+              {{- else }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+  {{- end }}
+  {{- end -}}
+  {{- end -}}
+  {{- if .Values.kibana.ingress.tls }}
+  tls:
+{{ tpl (toYaml .Values.kibana.ingress.tls | indent 4) . }}
+  {{- end -}}
+{{- end -}}

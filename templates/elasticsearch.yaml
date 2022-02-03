@@ -1,0 +1,139 @@
+{{- if .Values.elasticsearch.enabled }}
+{{- $root := . -}}
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: {{ template "eck-resources.fullname" . }}-elasticsearch
+  labels:
+    app: {{ template "eck-resources.name" . }}-elasticsearch
+{{ include "eck-resources.labels" . | indent 4 }}
+{{- if .Values.elasticsearch.annotations }}
+  annotations:
+{{ toYaml .Values.elasticsearch.annotations | indent 4 }}
+{{- end }}
+spec:
+  version: {{ .Values.elasticsearch.version }}
+  {{- if .Values.elasticsearch.http }}
+  http:
+{{ toYaml .Values.elasticsearch.http | indent 4 }}
+  {{- end }}
+
+  {{- if .Values.elasticsearch.auth }}
+  auth:
+{{ toYaml .Values.elasticsearch.auth | indent 4 }}
+  {{- end }}
+
+ {{- if .Values.elasticsearch.image }}
+  image:
+{{ toYaml .Values.elasticsearch.image | indent 4 }}
+  {{- end }}
+
+  {{- if .Values.elasticsearch.nodeSets }}
+  nodeSets:
+    {{- range .Values.elasticsearch.nodeSets }}
+  - name: {{.name }}
+    count: {{ .count }}
+    config:
+{{ toYaml $root.Values.elasticsearch.config | indent 6 }}
+{{ toYaml .config | indent 6 }}
+    podTemplate:
+      spec:
+      {{- if or $root.Values.elasticsearch.credentials.enabled $root.Values.elasticsearch.secretConfig }}
+        initContainers:
+        {{- if $root.Values.elasticsearch.secretConfig }}
+        - name: elastic-custom-init-keystore
+          command:
+          - /usr/bin/env
+          - bash
+          - -c
+          - |-
+            #!/usr/bin/env bash
+
+            echo "Initializing keystore."
+
+            # create a keystore in the default data path
+            bin/elasticsearch-keystore create
+
+            # add all existing secret entries into it
+        {{- range $key,$value := $root.Values.elasticsearch.secretConfig }}
+            echo "Adding {{ $key }} to keystore."
+            echo ${{ $key | replace "." "_" |upper }} | bin/elasticsearch-keystore add --stdin {{ $key }}
+        {{- end }}
+
+            echo "Keystore initialization successful."
+          env:
+          {{- range $key,$value := $root.Values.elasticsearch.secretConfig }}
+          - name: {{ $key | replace "." "_" |upper }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "eck-resources.fullname" $root }}-keystore
+                key: {{ $key }}
+          {{- end }}
+          resources:
+{{ toYaml $root.Values.elasticsearch.secretResources | indent 12 }}
+              ephemeral-storage: 200Mi
+        {{- end }}
+
+        {{- if $root.Values.elasticsearch.credentials.enabled }}
+        - name: elastic-init-auth-user
+          command:
+          - /usr/bin/env
+          - bash
+          - -c
+          - |-
+            #!/usr/bin/env bash
+            echo "Create elasticsearch user."
+            # create a keystore in the default data path
+            bin/elasticsearch-users useradd $USER_USERNAME -p $USER_PASSWORD -r superuser
+          env:
+          - name: USER_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "eck-resources.fullname" $root }}-credentials
+                key: auth_username
+          - name: USER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "eck-resources.fullname" $root }}-credentials
+                key: auth_password
+          resources:
+{{ toYaml $root.Values.elasticsearch.credentials.resources | indent 12 }}
+        {{- end }}
+      {{- end }}
+
+        containers:
+        - name: elasticsearch
+        {{- if .resources }}
+          resources:
+{{ toYaml .resources | indent 12 }}
+        {{- end }}
+
+        {{- if .env }}
+          env:
+{{ toYaml .env | indent 12 }}
+        {{- end }}
+      {{- if .volumeClaimTemplates }}
+    volumeClaimTemplates:
+{{ toYaml .volumeClaimTemplates | indent 6 }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+
+  {{- if .Values.elasticsearch.podDisruptionBudget }}
+  podDisruptionBudget:
+{{ toYaml .Values.elasticsearch.podDisruptionBudget | indent 4 }}
+  {{- end }}
+
+  {{- if .Values.elasticsearch.secureSettings }}
+  secureSettings:
+{{ toYaml .Values.elasticsearch.secureSettings | indent 4 }}
+  {{- end }}
+
+  {{- if .Values.elasticsearch.updateStrategy }}
+  updateStrategy:
+{{ toYaml .Values.elasticsearch.updateStrategy | indent 4 }}
+  {{- end }}
+  {{- if .Values.elasticsearch.extraSpec }}
+{{ toYaml .Values.elasticsearch.extraSpec | indent 2 }}
+  {{- end }}
+{{- end }}

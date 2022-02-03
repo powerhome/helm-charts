@@ -1,0 +1,107 @@
+fullnameOverride: eck
+
+elasticsearch:
+  enabled: true
+  credentials:
+    enabled: true
+  version: 7.16.3
+  secretConfig:
+    xpack.security.authc.realms.oidc.dex.rp.client_secret: test
+  config:
+    node.store.allow_mmap: false
+    ingest.geoip.downloader.enabled: false
+    xpack.security.http.ssl.enabled: true
+  nodeSets:
+  - name: data
+    count: 3
+    config:
+      node:
+        roles: [data, ingest]
+    resources:
+      requests:
+        cpu: "2"
+        ephemeral-storage: 100Mi
+        memory: "4Gi"
+      limits:
+        cpu: "4"
+        ephemeral-storage: 100Mi
+        memory: "4Gi"
+    env:
+    - name: ES_JAVA_OPTS
+      value: "-Xmx2g -Xms2g -XX:MaxRAM=3072m"
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data # Do not change this name unless you set up a volume mount for the data path.
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 200Gi
+        storageClassName: "staging-performance"
+  - name: master
+    count: 3
+    config:
+      node:
+        roles: [master]
+    resources:
+      requests:
+        cpu: 2
+        ephemeral-storage: 100Mi
+        memory: 2Gi
+      limits:
+        cpu: 2
+        ephemeral-storage: 100Mi
+        memory: 2Gi
+    env:
+    - name: ES_JAVA_OPTS
+      value: "-Xmx1g -Xms1g -XX:MaxRAM=1536m"
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data # Do not change this name unless you set up a volume mount for the data path.
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+        storageClassName: "staging-performance"
+kibana:
+  enabled: true
+  version: 7.16.3
+  count: 1
+  config:
+    server.publicBaseUrl: https://kibana.example.com
+    xpack.security.authc.providers:
+      oidc.dex:
+        order: 0
+        realm: "dex"
+      basic.basic1:
+        order: 1
+  http:
+    tls:
+      certificate:
+        secretName: kibana-server-tls #same as ingress secret name
+  resources:
+    requests:
+      cpu: "1"
+      ephemeral-storage: 100Mi
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      ephemeral-storage: 100Mi
+      memory: "1Gi"
+  ingress:
+    enabled: true
+    port: 5601
+    annotations:
+      cert-manager.io/cluster-issuer: production-certs
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    hosts:
+    - kibana.example.com
+    tls:
+    - secretName: kibana-server-tls
+      hosts:
+      - kibana.example.com
+    routePrefix: /

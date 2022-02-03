@@ -1,0 +1,31 @@
+{{- $root := . }}
+{{- range .Values.beat.instances }}
+---
+{{/* Beats verification */}}
+{{- if and .deployment .daemonSet }}
+{{- fail (printf "You can't define a deployment and a daemonset at the same time for beat '%s'" .name) }}
+{{- end }}
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: {{ .name }}
+  labels:
+{{ include "eck-resources.labels" $root | indent 4 }}
+spec:
+  type: {{ .type | default $root.Values.beat.default.type }}
+  version: {{ .version | default $root.Values.beat.default.version }}
+  elasticsearchRef:
+    name: {{ .elasticsearchRef | default (printf "%s-elasticsearch" (include "eck-resources.fullname" $root )) }}
+  kibanaRef:
+    name: {{ .kibanaRef | default (include "eck-resources.kibana.serviceName" $root ) }}
+  config:
+{{ toYaml .config | indent 4}}
+  {{- if .daemonSet }}
+  daemonSet:
+{{ toYaml .daemonSet | indent 4}}
+  {{- end }}
+  {{- if .deployment }}
+  deployment:
+{{ toYaml .deployment | indent 4}}
+  {{- end }}
+{{- end }}
