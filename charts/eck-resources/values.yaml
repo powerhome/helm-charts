@@ -179,6 +179,11 @@ beat:
   #         containers:
   #         - name: test
 
+## services values
+services: []
+# services:
+# - name:
+
 
 ## serviceAccount values
 serviceAccounts: []
