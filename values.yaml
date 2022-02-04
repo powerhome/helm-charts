@@ -179,6 +179,18 @@ beat:
   #         containers:
   #         - name: test
 
+services: []
+# services:
+# - name: filebeat-netflow-svc
+#   ports:
+#   - name: netflow
+#     nodePort: 31955
+#     port: 2055
+#     protocol: TCP
+#     targetPort: 2055
+#   selector:
+#     beat: filebeat-netflow
+#   type: nodePort
 
 ## serviceAccount values
 serviceAccounts: []
