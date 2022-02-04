@@ -1,0 +1,33 @@
+{{- $root := . }}
+{{- range .Values.services }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  labels:
+{{ include "eck-resources.labels" $root | indent 4 }}
+{{- if .annotations }}
+  annotations:
+{{ toYaml .annotations | indent 4 }}
+{{- end }}
+spec:
+{{- if .clusterIP }}
+  clusterIP: {{ .clusterIP }}
+{{- end }}
+{{- if .externalIPs }}
+  externalIPs:
+{{ toYaml .externalIPs | indent 4 }}
+{{- end }}
+{{- if .loadBalancerIP }}
+  loadBalancerIP: {{ .loadBalancerIP }}
+{{- end }}
+  ports:
+{{ toYaml .ports | indent 4 }}
+  selector:
+{{ toYaml .selector | indent 4 }}
+{{- if .sessionAffinity }}
+  sessionAffinity: {{ .sessionAffinity }}
+{{- end }}
+  type: "{{ .type }}"
+{{- end }}
