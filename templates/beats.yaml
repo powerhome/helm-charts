@@ -10,6 +10,7 @@ kind: Beat
 metadata:
   name: {{ .name }}
   labels:
+    beat: {{ .name }}
 {{ include "eck-resources.labels" $root | indent 4 }}
 spec:
   type: {{ .type | default $root.Values.beat.default.type }}
@@ -17,9 +18,28 @@ spec:
   elasticsearchRef:
     name: {{ .elasticsearchRef | default (printf "%s-elasticsearch" (include "eck-resources.fullname" $root )) }}
   kibanaRef:
-    name: {{ .kibanaRef | default (include "eck-resources.kibana.serviceName" $root ) }}
+    name: {{ .kibanaRef | default (printf "%s-kibana" (include "eck-resources.fullname" $root )) }}
   config:
 {{ toYaml .config | indent 4}}
+    {{- if $root.Values.elasticsearch.credentials.enabled }}
+    output.elasticsearch:
+      username: "{{ $root.Values.elasticsearch.credentials.username }}"
+      password: "{{ $root.Values.elasticsearch.credentials.password }}"
+    {{- end }}
+    {{- if $root.Values.kibana.http.tls }}
+    setup.kibana:
+      ssl.verification_mode: certificate
+      {{- if $root.Values.elasticsearch.credentials.enabled }}
+      username: "{{ $root.Values.elasticsearch.credentials.username }}"
+      password: "{{ $root.Values.elasticsearch.credentials.password }}"
+      {{- end }}
+    {{- end }}
+    {{- if $root.Values.elasticsearch.credentials.enabled }}
+    monitoring.elasticsearch:
+      # hosts: ["{{ printf "%s-elasticsearch" (include "eck-resources.fullname" $root ) }}:9200"]
+      username: "{{ $root.Values.elasticsearch.credentials.username }}"
+      password: "{{ $root.Values.elasticsearch.credentials.password }}"
+    {{- end }}
   {{- if .daemonSet }}
   daemonSet:
 {{ toYaml .daemonSet | indent 4}}
