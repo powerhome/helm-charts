@@ -16,9 +16,9 @@ spec:
   type: {{ .type | default $root.Values.beat.default.type }}
   version: {{ .version | default $root.Values.beat.default.version }}
   elasticsearchRef:
-    name: {{ .elasticsearchRef | default (printf "%s-elasticsearch" (include "eck-resources.fullname" $root )) }}
+    name: {{ .elasticsearchRef | default (include "eck-resources.elasticsearch.fullname" $root ) }}
   kibanaRef:
-    name: {{ .kibanaRef | default (printf "%s-kibana" (include "eck-resources.fullname" $root )) }}
+    name: {{ .kibanaRef | default (include "eck-resources.kibana.fullname" $root ) }}
   config:
 {{ toYaml .config | indent 4}}
     {{- if $root.Values.elasticsearch.credentials.enabled }}
@@ -36,7 +36,7 @@ spec:
     {{- end }}
     {{- if $root.Values.elasticsearch.credentials.enabled }}
     monitoring.elasticsearch:
-      # hosts: ["{{ printf "%s-elasticsearch" (include "eck-resources.fullname" $root ) }}:9200"]
+      hosts: ["{{ include "eck-resources.elasticsearch.serviceName" $root }}:9200"]
       username: "{{ $root.Values.elasticsearch.credentials.username }}"
       password: "{{ $root.Values.elasticsearch.credentials.password }}"
     {{- end }}

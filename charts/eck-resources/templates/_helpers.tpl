@@ -29,6 +29,11 @@ The longest name that gets created adds and extra 37 characters, so truncation s
 {{- printf "%s-elasticsearch" (include "eck-resources.fullname" .) -}}
 {{- end }}
 
+{{/* Kibana service suffixed */}}
+{{- define "eck-resources.elasticsearch.serviceName" -}}
+{{- printf "%s-elasticsearch-es-http" (include "eck-resources.fullname" .) -}}
+{{- end }}
+
 {{/* Fullname suffixed */}}
 {{- define "eck-resources.kibana.fullname" -}}
 {{- printf "%s-kibana" (include "eck-resources.fullname" .) -}}
