@@ -38,7 +38,7 @@ elasticsearch:
         resources:
           requests:
             storage: 200Gi
-        storageClassName: "staging-performance"
+        storageClassName: "production-performance"
   - name: master
     count: 3
     config:
