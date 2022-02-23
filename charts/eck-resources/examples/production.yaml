@@ -65,7 +65,7 @@ elasticsearch:
         resources:
           requests:
             storage: 2Gi
-        storageClassName: "staging-performance"
+        storageClassName: "production-performance"
 kibana:
   enabled: true
   version: 7.16.3
