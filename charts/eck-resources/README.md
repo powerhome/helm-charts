@@ -19,3 +19,6 @@ Besides that there are some example files in [examples/](./examples/).
 
 ## Configure OIDC
 This chart allows you to configure login using OIDC. Note that this feature isn't available in the basic license.
+
+## References
+We used some of the best practices for helm charts used in  https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack/
