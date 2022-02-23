@@ -1,7 +1,7 @@
 # eck-resources-chart
 Helm chart for easily templating ECK resources for deploying Elasticsearch, Kibana etc with reduced duplication.
 
-It allows the user to create some of the custom resources managed by ECK in a simpler way taking advantes of helm templating.
+It allows the user to create some of the custom resources managed by ECK in a simpler way by taking advantage of Helm templating.
 
 For now the chart can create the following resources:
 * Elasticsearch
