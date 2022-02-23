@@ -1,0 +1,27 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: helm-charts
+  title: PHRG helm-charts
+  description: Helm charts created by Power Home Remodling Group.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: powerhome/helm-charts
+spec:
+  owner: watchtower
+  domain: technology-foundations-and-tools
+  lifecycle: production
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: eck-resources-chart
+  title: Chart eck-resources
+  description: This component is a helm chart that manages ECK resources.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: library
+  owner: watchtower
+  lifecycle: production
+  subcomponentOf: helm-charts
