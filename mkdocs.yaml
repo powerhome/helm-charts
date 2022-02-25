@@ -1,0 +1,7 @@
+site_name: helm-charts
+site_description: PHRG helm-charts repo
+nav:
+  - "Home": "README.md"
+  - "Chart eck-resources": "charts/eck-resources/README.md"
+plugins:
+  - techdocs-core

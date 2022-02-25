@@ -1,0 +1,35 @@
+{{- if .Values.kibana.enabled }}
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: {{ template "eck-resources.fullname" . }}-kibana
+  labels:
+    app: {{ template "eck-resources.name" . }}-kibana
+{{ include "eck-resources.labels" . | indent 4 }}
+{{- if .Values.kibana.annotations }}
+  annotations:
+{{ toYaml .Values.kibana.annotations | indent 4 }}
+{{- end }}
+spec:
+  version: {{ .Values.kibana.version }}
+  count: {{ .Values.kibana.count }}
+  {{- if .Values.kibana.http }}
+  http:
+{{ toYaml .Values.kibana.http | indent 4 }}
+  {{- end }}
+  {{- if .Values.kibana.config }}
+  config:
+{{ toYaml .Values.kibana.config | indent 4 }}
+  {{- end }}
+  elasticsearchRef:
+    name: "{{ .Values.kibana.externalElasticsearchRef | default (printf "%s-elasticsearch" (include "eck-resources.fullname" . )) }}"
+  podTemplate:
+    spec:
+      containers:
+      - name: kibana
+        resources:
+{{ toYaml .Values.kibana.resources | indent 10 }}
+  {{- if .Values.kibana.extraSpec }}
+{{ toYaml .Values.kibana.extraSpec | indent 2 }}
+  {{- end }}
+{{- end }}

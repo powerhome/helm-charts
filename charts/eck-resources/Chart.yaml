@@ -1,0 +1,11 @@
+apiVersion: v2
+description: After ECK is deployed to you cluster this chart creates Elasticsearch and kibana resources.
+home: https://github.com/powerhome/eck-resources-chart/charts/eck-resources
+maintainers:
+- email: phrgadmin@powerhrg.com
+  name: Power HRG
+name: eck-resources
+version: 0.0.1
+appVersion: 7.16.3
+sources:
+  - https://github.com/powerhome/eck-resources-chart/charts/eck-resources

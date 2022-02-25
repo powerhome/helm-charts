@@ -1,0 +1,51 @@
+{{- $root := . }}
+{{- range .Values.beat.instances }}
+---
+{{/* Beats verification */}}
+{{- if and .deployment .daemonSet }}
+{{- fail (printf "You can't define a deployment and a daemonset at the same time for beat '%s'" .name) }}
+{{- end }}
+apiVersion: beat.k8s.elastic.co/v1beta1
+kind: Beat
+metadata:
+  name: {{ .name }}
+  labels:
+    beat: {{ .name }}
+{{ include "eck-resources.labels" $root | indent 4 }}
+spec:
+  type: {{ .type | default $root.Values.beat.default.type }}
+  version: {{ .version | default $root.Values.beat.default.version }}
+  elasticsearchRef:
+    name: {{ .elasticsearchRef | default (include "eck-resources.elasticsearch.fullname" $root ) }}
+  kibanaRef:
+    name: {{ .kibanaRef | default (include "eck-resources.kibana.fullname" $root ) }}
+  config:
+{{ toYaml .config | indent 4}}
+    {{- if $root.Values.elasticsearch.credentials.enabled }}
+    output.elasticsearch:
+      username: "{{ $root.Values.elasticsearch.credentials.username }}"
+      password: "{{ $root.Values.elasticsearch.credentials.password }}"
+    {{- end }}
+    {{- if $root.Values.kibana.http.tls }}
+    setup.kibana:
+      ssl.verification_mode: certificate
+      {{- if $root.Values.elasticsearch.credentials.enabled }}
+      username: "{{ $root.Values.elasticsearch.credentials.username }}"
+      password: "{{ $root.Values.elasticsearch.credentials.password }}"
+      {{- end }}
+    {{- end }}
+    {{- if $root.Values.elasticsearch.credentials.enabled }}
+    monitoring.elasticsearch:
+      hosts: ["{{ include "eck-resources.elasticsearch.serviceName" $root }}:9200"]
+      username: "{{ $root.Values.elasticsearch.credentials.username }}"
+      password: "{{ $root.Values.elasticsearch.credentials.password }}"
+    {{- end }}
+  {{- if .daemonSet }}
+  daemonSet:
+{{ toYaml .daemonSet | indent 4}}
+  {{- end }}
+  {{- if .deployment }}
+  deployment:
+{{ toYaml .deployment | indent 4}}
+  {{- end }}
+{{- end }}
