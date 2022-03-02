@@ -3,7 +3,7 @@ kind: System
 metadata:
   name: helm-charts
   title: PHRG helm-charts
-  description: Helm charts created by Power Home Remodling Group.
+  description: Helm charts created by Power Home Remodeling Group.
   annotations:
     backstage.io/techdocs-ref: dir:.
     github.com/project-slug: powerhome/helm-charts
@@ -24,4 +24,4 @@ spec:
   type: library
   owner: watchtower
   lifecycle: production
-  subcomponentOf: helm-charts
+  system: helm-charts
