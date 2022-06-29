@@ -1,2 +1,2 @@
-# PHRG helm-charts
-Helm charts created by Power Home Remodling Group.
+# Power Helm Charts
+Helm charts created by Power Home Remodeling Group.
