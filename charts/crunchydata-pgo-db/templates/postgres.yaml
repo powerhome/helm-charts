@@ -3,7 +3,7 @@ kind: PostgresCluster
 metadata:
   name: {{ default .Release.Name .Values.name }}
 spec:
-  postgresVersion: {{ default 13 .Values.postgresVersion }}
+  postgresVersion: {{ required "You must set the version of Postgres to deploy." .Values.postgresVersion }}
   {{- if .Values.postGISVersion }}
   postGISVersion: {{ quote .Values.postGISVersion }}
   {{- end }}
@@ -35,17 +35,6 @@ spec:
         limits:
           cpu: {{ default "" .Values.instanceResources.limits.cpu | quote }}
           memory: {{ default "" .Values.instanceResources.limits.memory | quote }}
-      {{- end }}
-      {{- if .Values.replicaCertCopyResources }}
-      sidecars:
-        replicaCertCopy:
-          resources:
-            requests:
-              cpu: {{ default "" .Values.replicaCertCopyResources.requests.cpu | quote }}
-              memory: {{ default "" .Values.replicaCertCopyResources.requests.memory | quote }}
-            limits:
-              cpu: {{ default "" .Values.replicaCertCopyResources.limits.cpu | quote }}
-              memory: {{ default "" .Values.replicaCertCopyResources.limits.memory | quote }}
       {{- end }}
   {{- end }}
   backups:
