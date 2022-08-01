@@ -76,6 +76,9 @@ postgresVersion: 14
 # instanceResources defines the resources requests and limits for the container
 # instanceResources: {}
 
+# instanceAffinity defines affinity rules for the container
+# instanceAffinity: {}
+
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
 # overrides this value.

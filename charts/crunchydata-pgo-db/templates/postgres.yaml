@@ -27,6 +27,9 @@ spec:
           requests:
             storage: {{ default "1Gi" .Values.instanceSize | quote }}
         storageClassName: {{ .Values.storageClassName | quote }}
+      {{- if .Values.instanceAffinity }}
+{{ toYaml .Values.instanceAffinity | indent 8 }}
+      {{- end }}
       {{- if .Values.instanceResources }}
       resources:
         requests:
