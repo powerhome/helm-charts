@@ -14,4 +14,4 @@ Please remember to make a tagged release after merging your PR that:
  - Has a tag name that matches your PR branch name (see above)
  - Has a description that summarizes the changes made
 
-This makes its possible to use previous versions of the charts maintained here as new releases are published. Please see the release history of this repository for examples.
+This makes it possible to use previous versions of the charts maintained here as new releases are published. Please see the release history of this repository for examples.
