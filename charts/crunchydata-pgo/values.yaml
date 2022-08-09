@@ -34,6 +34,12 @@ relatedImages:
 # PGO watches only the namespace in which it is installed.
 singleNamespace: false
 
+# Should the chart try to manage CRDs
+createCRD: false
+
+# Show the chart try to manage RBAC
+createRBAC: false
+
 # debug allows you to enable or disable the "debug" level of logging.
 debug: true
 

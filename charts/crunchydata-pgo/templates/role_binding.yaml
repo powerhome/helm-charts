@@ -1,3 +1,4 @@
+{{ if .Values.createRBAC -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ include "install.roleBindingKind" . }}
@@ -30,3 +31,4 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "install.serviceAccountName" . }}-upgrade
   namespace: {{ .Release.Namespace }}
+{{- end }}
