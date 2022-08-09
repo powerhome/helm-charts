@@ -37,6 +37,12 @@ singleNamespace: false
 # debug allows you to enable or disable the "debug" level of logging.
 debug: true
 
+# Should the chart try to manage CRDs
+manageCRD: false
+
+# Should the chart try to manage RBAC
+manageRBAC: false
+
 # imagePullSecretNames is a list of secret names to use for pulling controller images.
 # More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 imagePullSecretNames: []
