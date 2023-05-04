@@ -22,13 +22,6 @@ spec:
       containers:
       - name: operator
         image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}
-        resources:
-          requests:
-            cpu: "{{ .Values.resources.requests.cpu }}"
-            memory: "{{ .Values.resources.requests.memory }}"
-          limits:
-            cpu: "{{ .Values.resources.limits.cpu }}"
-            memory: "{{ .Values.resources.limits.memory }}"
         env:
         - name: CRUNCHY_DEBUG
           value: {{ .Values.debug | ne false | quote }}
@@ -47,7 +40,12 @@ spec:
         - name: CHECK_FOR_UPGRADES
           value: "false"
         {{- end }}
+        {{- if .Values.resources.controller }}
+        resources:
+        {{- toYaml .Values.resources.controller | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
+          capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true

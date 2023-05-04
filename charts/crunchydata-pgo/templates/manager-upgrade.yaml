@@ -22,13 +22,6 @@ spec:
       containers:
       - name: operator
         image: {{ required ".Values.controllerImages.upgrade is required" .Values.controllerImages.upgrade | quote }}
-        resources:
-          requests:
-            cpu: "{{ .Values.resources.requests.cpu }}"
-            memory: "{{ .Values.resources.requests.memory }}"
-          limits:
-            cpu: "{{ .Values.resources.limits.cpu }}"
-            memory: "{{ .Values.resources.limits.memory }}"
         env:
         - name: CRUNCHY_DEBUG
           value: {{ .Values.debug | ne false | quote }}
@@ -41,7 +34,12 @@ spec:
           value: {{ .Values.workers | quote }}
         {{- end }}
         {{- include "install.relatedImages" . | indent 8 }}
+        {{- if .Values.resources.upgrade }}
+        resources:
+        {{- toYaml .Values.resources.upgrade | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
+          capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
