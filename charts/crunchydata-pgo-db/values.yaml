@@ -154,6 +154,10 @@ postgresVersion: 15
 # databaseInitSQL:
 #   name: bootstrap-sql
 #   key: bootstrap.sql
+# # If you specify the content key the chart will create a ConfigMap.
+#   content: |-
+#     \c awx
+#     GRANT CREATE ON SCHEMA public TO "awx";
 
 # standby sets whether or not to run this as a standby cluster. Setting "enabled" to
 # "true" eunables the standby cluster while "repoName" points to a pgBackRest
