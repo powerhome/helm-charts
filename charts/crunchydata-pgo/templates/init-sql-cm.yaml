@@ -1,0 +1,10 @@
+---
+{{- if and .Values.databaseInitSQL .Values.databaseInitSQL.content }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.databaseInitSQL.name }}"
+data:
+  {{ .Values.databaseInitSQL.key }}: |-
+    {{ .Values.databaseInitSQL.content | nindent 4 }}
+{{- end }}

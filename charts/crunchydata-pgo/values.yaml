@@ -57,3 +57,12 @@ imagePullSecretNames: []
 resources:
   controller: {}
   upgrade: {}
+
+# On database creation, the init script will be run.
+# databaseInitSQL:
+#   name: init-sql
+#   key: init.sql
+# # If you specify the content key the chart will create a ConfigMap.
+#   content: |-
+#     \c awx
+#     GRANT CREATE ON SCHEMA public TO "awx";
