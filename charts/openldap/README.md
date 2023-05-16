@@ -62,6 +62,7 @@ The following table lists the configurable parameters of the openldap chart and 
 | `tls.CA.secret`                    | Secret containing CA certificate (ca.crt)                                                                                                 | `""`                |
 | `adminPassword`                    | Password for admin user. Unset to auto-generate the password                                                                              | None                |
 | `configPassword`                   | Password for config user. Unset to auto-generate the password                                                                             | None                |
+| `customSchemaFiles`                  | Custom schema files to seed the LDAP server. List of filename -> data pairs                                                                 | None                |
 | `customLdifFiles`                  | Custom ldif files to seed the LDAP server. List of filename -> data pairs                                                                 | None                |
 | `persistence.enabled`              | Whether to use PersistentVolumes or not                                                                                                   | `false`             |
 | `persistence.storageClass`         | Storage class for PersistentVolumes.                                                                                                      | `<unset>`           |
