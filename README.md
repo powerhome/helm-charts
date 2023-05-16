@@ -18,6 +18,9 @@ repositories:
     url: git+https://github.com/powerhome/helm-charts@charts?ref=crunchydata-pgo-v0.2.4
   - name: powerhome-crunchydata-pgo-db
     url: git+https://github.com/powerhome/helm-charts@charts?ref=crunchydata-pgo-db-v0.2.4
+  - name: powerhome-openldap
+    url: git+https://github.com/powerhome/helm-charts@charts?ref=openldap-v1.3.0
+
   # This will reference the chart versions available for all charts on main
   - name: powerhome
     url: git+https://github.com/powerhome/helm-charts@charts?ref=main
@@ -34,5 +37,11 @@ releases:
     chart: powerhome-crunchydata-pgo-db/crunchydata-pgo-db
     namespace: my-namespace
     version: 0.2.4
+    values: []
+
+  - name: openldap
+    chart: powerhome-openldap/openldap
+    namespace: my-namespace
+    version: 1.3.0
     values: []
 ```
