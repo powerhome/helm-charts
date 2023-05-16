@@ -46,9 +46,13 @@ The following table lists the configurable parameters of the openldap chart and 
 | `service.clusterIP`                | IP address to assign to the service                                                                                                       | `nil`                |
 | `service.externalIPs`              | Service external IP addresses                                                                                                             | `[]`                |
 | `service.ldapPort`                 | External service port for LDAP                                                                                                            | `389`               |
+| `service.nodeLdapPort`                 | Reserved service nodePort for LDAP                                                                                                            | `""`               |
+
 | `service.loadBalancerIP`           | IP address to assign to load balancer (if supported)                                                                                      | `""`                |
 | `service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported)                                                                           | `[]`                |
 | `service.sslLdapPort`              | External service port for SSL+LDAP                                                                                                        | `636`               |
+| `service.nodeSslLdapPort`              | Reserved service nodePort for SSL+LDAP                                                                                                        | `""`               |
+
 | `service.type`                     | Service type                                                                                                                              | `ClusterIP`         |
 | `env`                              | List of key value pairs as env variables to be sent to the docker image. See https://github.com/osixia/docker-openldap for available ones | `[see values.yaml]` |
 | `logLevel`                         | Set the container log level. Valid values: `none`, `error`, `warning`, `info`, `debug`, `trace`                                           | `info`              |

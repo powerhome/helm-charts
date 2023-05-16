@@ -41,6 +41,10 @@ service:
 
   ldapPort: 389
   sslLdapPort: 636  # Only used if tls.enabled is true
+  # Only effectively used if service type is NodePort
+  nodeLdapPort: ""
+  nodeSslLdapPort: ""
+
   ## List of IP addresses at which the service is available
   ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
   ##
