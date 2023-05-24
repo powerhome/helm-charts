@@ -54,6 +54,9 @@ spec:
               chmod 777  /tmp-certs/*
               {{- end }}
               cp -Lr /tmp-certs/* /certs
+          {{- if .Values.customTLS.resources }}
+          resources: {{- toYaml .Values.customTLS.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: certs
               mountPath: "/certs"
