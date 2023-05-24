@@ -16,8 +16,6 @@ keywords:
   - openldap
   - iam-stack
   - high availability
-sources:
-  - https://github.com/jp-gouin/helm-openldap
 maintainers:
   - name: Jean-Philippe Gouin
     email: jp-gouin@hotmail.fr
