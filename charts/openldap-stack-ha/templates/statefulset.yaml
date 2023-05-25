@@ -53,7 +53,10 @@ spec:
               cp /tmp-certs/tls.crt /tmp-certs/ca.crt
               chmod 777  /tmp-certs/*
               {{- end }}
-              cp -Lr /tmp-certs/* /certs
+              cp -vLr /tmp-certs/* /certs
+              {{- if .Values.customTLS.caSecret }}
+              cp -vLr /tmp-certs-ca/* /certs
+              {{- end }}
           {{- if .Values.customTLS.resources }}
           resources: {{- toYaml .Values.customTLS.resources | nindent 12 }}
           {{- end }}
@@ -62,6 +65,10 @@ spec:
               mountPath: "/certs"
             - name: secret-certs
               mountPath: "/tmp-certs"
+            {{- if .Values.customTLS.caSecret }}
+            - name: secret-certs-ca
+              mountPath: "/tmp-certs-ca"
+            {{- end }}
       {{- if .Values.volumePermissions.enabled }}
         - name: volume-permissions
           image: {{ include "openldap.initContainerImage" . }}
@@ -278,6 +285,11 @@ spec:
         - name: secret-certs
           secret:
             secretName: {{ .Values.customTLS.secret }}
+{{- if .Values.customTLS.caSecret }}
+        - name: secret-certs-ca
+          secret:
+            secretName: {{ .Values.customTLS.caSecret }}
+{{- end }}
 {{- else }}
         - name: secret-certs
           emptyDir:

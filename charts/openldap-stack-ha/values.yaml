@@ -69,6 +69,7 @@ customTLS:
     repository: alpine/openssl
     tag: latest
   secret: ""  # The name of a kubernetes.io/tls type secret to use for TLS
+  caSecret: "" # Sometimes it can be useful to inject a custom CA file. When using certmanager is one situation.
 ## Add additional labels to all resources
 extraLabels: {}
 
