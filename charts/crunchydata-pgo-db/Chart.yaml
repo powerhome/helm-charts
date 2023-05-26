@@ -1,6 +1,7 @@
 apiVersion: v2
 name: crunchydata-pgo-db
-description: A Helm chart for Kubernetes
+description: Installer for PGO, the open source Postgres Operator from Crunchy Data
 type: application
-version: 0.2.4-1
-appVersion: 5.1.1
+# The version below should match the version on the PostgresCluster CRD
+version: 5.3.1-1
+appVersion: 5.3.1
