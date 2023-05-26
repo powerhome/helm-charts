@@ -54,7 +54,7 @@ spec:
               chmod 777  /tmp-certs/*
               {{- end }}
               cp -vLr /tmp-certs/* /certs
-              {{- if .Values.customTLS.caSecret }}
+              {{- if .Values.customTLS.caPEMContent }}
               cp -vLr /tmp-certs-ca/* /certs
               {{- end }}
           {{- if .Values.customTLS.resources }}
@@ -65,8 +65,8 @@ spec:
               mountPath: "/certs"
             - name: secret-certs
               mountPath: "/tmp-certs"
-            {{- if .Values.customTLS.caSecret }}
-            - name: secret-certs-ca
+            {{- if .Values.customTLS.caPEMContent }}
+            - name: {{ template "openldap.fullname" . }}-customTLS-ca
               mountPath: "/tmp-certs-ca"
             {{- end }}
       {{- if .Values.volumePermissions.enabled }}
@@ -285,10 +285,10 @@ spec:
         - name: secret-certs
           secret:
             secretName: {{ .Values.customTLS.secret }}
-{{- if .Values.customTLS.caSecret }}
-        - name: secret-certs-ca
+{{- if .Values.customTLS.caPEMContent }}
+        - name: {{ template "openldap.fullname" . }}-customTLS-ca
           secret:
-            secretName: {{ .Values.customTLS.caSecret }}
+            secretName: {{ template "openldap.fullname" . }}-customTLS-ca
 {{- end }}
 {{- else }}
         - name: secret-certs
