@@ -1,6 +1,12 @@
 dependencies:
+- name: ltb-passwd
+  repository: ""
+  version: 0.1.x
+- name: phpldapadmin
+  repository: ""
+  version: 0.1.x
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 1.17.1
-digest: sha256:dacc73770a5640c011e067ff8840ddf89631fc19016c8d0a9e5ea160e7da8690
-generated: "2023-05-24T19:31:03.718701-03:00"
+digest: sha256:b3959efcba032cf6245b8c50c54c3b3158d042cc8eb4362ad8778b5cf5c840e0
+generated: "2023-05-26T09:34:12.322487-03:00"

@@ -1,6 +1,12 @@
 apiVersion: v2
 name: openldap-stack-ha
 dependencies:
+  - name: ltb-passwd
+    version: 0.1.x
+    condition: ltb-passwd.enabled
+  - name: phpldapadmin
+    version: 0.1.x
+    condition: phpldapadmin.enabled
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
@@ -16,6 +22,8 @@ keywords:
   - openldap
   - iam-stack
   - high availability
+sources:
+  - https://github.com/jp-gouin/helm-openldap
 maintainers:
   - name: Jean-Philippe Gouin
     email: jp-gouin@hotmail.fr
