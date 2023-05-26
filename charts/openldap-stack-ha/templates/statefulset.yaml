@@ -66,7 +66,7 @@ spec:
             - name: secret-certs
               mountPath: "/tmp-certs"
             {{- if .Values.customTLS.caPEMContent }}
-            - name: {{ template "openldap.fullname" . }}-customTLS-ca
+            - name: secret-certs-ca
               mountPath: "/tmp-certs-ca"
             {{- end }}
       {{- if .Values.volumePermissions.enabled }}
@@ -286,9 +286,9 @@ spec:
           secret:
             secretName: {{ .Values.customTLS.secret }}
 {{- if .Values.customTLS.caPEMContent }}
-        - name: {{ template "openldap.fullname" . }}-customTLS-ca
+        - name: secret-certs-ca
           secret:
-            secretName: {{ template "openldap.fullname" . }}-customTLS-ca
+            secretName: {{ template "openldap.fullname" . }}-customtls-ca
 {{- end }}
 {{- else }}
         - name: secret-certs
