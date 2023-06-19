@@ -9,6 +9,11 @@ dependencies:
     repository: "file://charts/phpldapadmin"
     version: 0.1.x
     condition: phpldapadmin.enabled
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.10.x
 home: https://www.openldap.org
 version: 4.1.1
 appVersion: 2.6.3
