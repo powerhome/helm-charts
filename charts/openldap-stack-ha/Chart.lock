@@ -6,7 +6,7 @@ dependencies:
   repository: file://charts/phpldapadmin
   version: 0.1.2
 - name: common
-  repository: https://charts.bitnami.com/bitnami
-  version: 1.10.4
-digest: sha256:bb0190ea08529f51d4b6f988ba19ee08999c20eb981c3fd787a6f0d6e0b6b9eb
-generated: "2023-06-19T16:11:41.504268-03:00"
+  repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+  version: 1.17.1
+digest: sha256:0c287e5ca6e42ee2d2bc5620f92e7506df6b1865a1fed24e42d64c34c7a4cb44
+generated: "2023-06-19T19:04:09.719542-03:00"
