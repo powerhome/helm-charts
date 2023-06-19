@@ -2,8 +2,10 @@ apiVersion: v2
 name: openldap-stack-ha
 dependencies:
   - name: ltb-passwd
+    repository: "file://charts/ltb-passwd"
     version: 0.1.x
   - name: phpldapadmin
+    repository: "file://charts/phpldapadmin"
     version: 0.1.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
