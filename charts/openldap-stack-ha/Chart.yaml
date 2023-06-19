@@ -11,8 +11,6 @@ dependencies:
     condition: phpldapadmin.enabled
   - name: common
     repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
-    tags:
-      - bitnami-common
     version: 1.10.x
 home: https://www.openldap.org
 version: 4.1.1
