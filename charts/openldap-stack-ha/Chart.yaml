@@ -1,11 +1,5 @@
 apiVersion: v2
 name: openldap-stack-ha
-dependencies:
-  - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
-    version: 1.x.x
 home: https://www.openldap.org
 version: 4.1.1
 appVersion: 2.6.3
