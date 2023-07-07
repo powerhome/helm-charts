@@ -23,12 +23,7 @@ spec:
       - name: operator
         image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}
         resources:
-          requests:
-            cpu: "{{ .Values.resources.requests.cpu }}"
-            memory: "{{ .Values.resources.requests.memory }}"
-          limits:
-            cpu: "{{ .Values.resources.limits.cpu }}"
-            memory: "{{ .Values.resources.limits.memory }}"
+        {{ toYaml .Values.resources | indent 10 }}
         env:
         - name: CRUNCHY_DEBUG
           value: {{ .Values.debug | ne false | quote }}
