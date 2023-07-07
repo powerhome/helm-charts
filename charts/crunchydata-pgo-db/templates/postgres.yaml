@@ -33,7 +33,9 @@ spec:
           cpu: {{ default "" .Values.instanceResources.requests.cpu | quote }}
           memory: {{ default "" .Values.instanceResources.requests.memory | quote }}
         limits:
+          {{- if .Values.instanceResources.limits.cpu }}
           cpu: {{ default "" .Values.instanceResources.limits.cpu | quote }}
+          {{- end }}
           memory: {{ default "" .Values.instanceResources.limits.memory | quote }}
       {{- end }}
   {{- end }}
