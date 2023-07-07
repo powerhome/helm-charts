@@ -29,14 +29,7 @@ spec:
         storageClassName: {{ .Values.storageClassName | quote }}
       {{- if .Values.instanceResources }}
       resources:
-        requests:
-          cpu: {{ default "" .Values.instanceResources.requests.cpu | quote }}
-          memory: {{ default "" .Values.instanceResources.requests.memory | quote }}
-        limits:
-          {{- if .Values.instanceResources.limits.cpu }}
-          cpu: {{ default "" .Values.instanceResources.limits.cpu | quote }}
-          {{- end }}
-          memory: {{ default "" .Values.instanceResources.limits.memory | quote }}
+{{ toYaml .Values.instanceResources | indent 8 }}
       {{- end }}
   {{- end }}
   backups:
