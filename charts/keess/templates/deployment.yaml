@@ -30,6 +30,15 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          args:
+          - run
+          - --sourceContext={{ .Values.clusterName }}
+          {{- if .Values.remoteClusters }}
+          - --destinationContexts={{ .Values.remoteClusters }}
+          {{- end }}
+          {{- if .Values.developmentMode }}
+          - --developmentMode={{ .Values.developmentMode }}
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.kubeconfigContent }}
           volumeMounts:
