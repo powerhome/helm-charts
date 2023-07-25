@@ -40,7 +40,7 @@ spec:
           - --developmentMode={{ .Values.developmentMode }}
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.kubeconfigContent }}
+          {{- if .Values.config.kubeconfigContent }}
           volumeMounts:
           - name: config
             mountPath: /root/.kube
