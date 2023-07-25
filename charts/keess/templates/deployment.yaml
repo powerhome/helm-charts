@@ -37,12 +37,12 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           args:
           - run
-          - --sourceContext={{ .Values.clusterName }}
+          - --sourceContext="{{ .Values.clusterName }}"
           {{- if .Values.remoteClusters }}
-          - --destinationContexts={{ .Values.remoteClusters }}
+          - --destinationContexts="{{ .Values.remoteClusters }}"
           {{- end }}
           {{- if .Values.developmentMode }}
-          - --developmentMode={{ .Values.developmentMode }}
+          - --developmentMode="{{ .Values.developmentMode }}"
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
