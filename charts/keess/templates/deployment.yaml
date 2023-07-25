@@ -38,14 +38,14 @@ spec:
           args:
           - run
           env:
-          - name: KUBED_SOURCE_CONTEXT
+          - name: KEESS_SOURCE_CONTEXT
             value: "{{ .Values.clusterName }}"
           {{- if .Values.remoteClusters }}  
-          - name: KUBED_DESTINATION_CONTEXTS
+          - name: KEESS_DESTINATION_CONTEXTS
             value: "{{ .Values.remoteClusters }}"
           {{- end }}
           {{- if .Values.developmentMode }}
-          - name: KUBED_DEVELOPMENT_MODE
+          - name: KEESS_DEVELOPMENT_MODE
             value: "{{ .Values.developmentMode }}"
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
