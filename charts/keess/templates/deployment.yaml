@@ -44,11 +44,6 @@ spec:
           - name: config
             mountPath: /root/.kube
             readOnly: true
-          volumes:
-          - name: config
-            secret:
-              secretName: {{ template "keess.fullname" . }}
-              defaultMode: 420
           # ports:
           #   - name: http
           #     containerPort: {{ .Values.service.port }}
@@ -63,6 +58,11 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+        volumes:
+        - name: config
+          secret:
+            secretName: {{ template "keess.fullname" . }}
+            defaultMode: 420
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
