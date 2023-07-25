@@ -37,12 +37,16 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           args:
           - run
-          - --sourceContext="{{ .Values.clusterName }}"
-          {{- if .Values.remoteClusters }}
-          - --destinationContexts="{{ .Values.remoteClusters }}"
+          env:
+          - name: KUBED_SOURCE_CONTEXT
+            value: "{{ .Values.clusterName }}"
+          {{- if .Values.remoteClusters }}  
+          - name: KUBED_DESTINATION_CONTEXTS
+            value: "{{ .Values.remoteClusters }}"
           {{- end }}
           {{- if .Values.developmentMode }}
-          - --developmentMode="{{ .Values.developmentMode }}"
+          - name: KUBED_DEVELOPMENT_MODE
+            value: "{{ .Values.developmentMode }}"
           {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
