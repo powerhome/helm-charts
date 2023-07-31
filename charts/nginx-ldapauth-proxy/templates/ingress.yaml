@@ -1,0 +1,37 @@
+{{- if .Values.ingress.enabled -}}
+{{- $serviceName := include "nginx-ldapauth-proxy.fullname" . -}}
+{{- $servicePort := .Values.service.externalPort -}}
+{{- $pathType := .Values.ingress.pathType | default "ImplementationSpecific" -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "nginx-ldapauth-proxy.fullname" . }}
+  labels:
+    app: {{ template "nginx-ldapauth-proxy.name" . }}
+    chart: {{ template "nginx-ldapauth-proxy.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    {{- range $key, $value := .Values.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.className }}
+  rules:
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            pathType: {{ $pathType }}
+            backend:
+              service:
+                name: {{ $serviceName }}
+                port:
+                  number: {{ $servicePort }}
+    {{- end -}}
+  {{- if .Values.ingress.tls }}
+  tls:
+{{ toYaml .Values.ingress.tls | indent 4 }}
+  {{- end -}}
+{{- end -}}
