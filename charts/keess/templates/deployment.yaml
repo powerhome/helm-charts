@@ -35,8 +35,6 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          args:
-          - run
           env:
           - name: KEESS_SOURCE_CONTEXT
             value: "{{ .Values.clusterName }}"
