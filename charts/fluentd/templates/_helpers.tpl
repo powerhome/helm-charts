@@ -32,6 +32,26 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Common labels
+*/}}
+{{- define "fluentd.labels" -}}
+helm.sh/chart: {{ include "fluentd.chart" . }}
+{{ include "fluentd.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Selector labels
+*/}}
+{{- define "fluentd.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "fluentd.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "fluentd.serviceAccountName" -}}
@@ -39,5 +59,34 @@ Create the name of the service account to use
     {{ default (include "fluentd.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Shortened version of the releaseName, applied as a suffix to numerous resources.
+*/}}
+{{- define "fluentd.shortReleaseName" -}}
+{{- .Release.Name | trunc 35 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Name of the configMap used for the fluentd.conf configuration file; allows users to override the default.
+*/}}
+{{- define "fluentd.mainConfigMapName" -}}
+{{- if .Values.mainConfigMapNameOverride -}}
+    {{ .Values.mainConfigMapNameOverride }}
+{{- else -}}
+    {{ printf "%s-%s" "fluentd-main" ( include "fluentd.shortReleaseName" . ) }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Name of the configMap used for additional configuration files; allows users to override the default.
+*/}}
+{{- define "fluentd.extraFilesConfigMapName" -}}
+{{- if .Values.extraFilesConfigMapNameOverride -}}
+    {{ printf "%s" .Values.extraFilesConfigMapNameOverride }}
+{{- else -}}
+    {{ printf "%s-%s" "fluentd-config" ( include "fluentd.shortReleaseName" . ) }}
 {{- end -}}
 {{- end -}}
