@@ -10,7 +10,7 @@ helm3 plugin install https://github.com/aslafy-z/helm-git
 
 If you are using [Helmfile](https://github.com/roboll/helmfile), you can add the following to your `Helmfile`:
 
-```yaml 
+```yaml
 repositories:
 
   # This allows you to reference different chart versions created with different tags
