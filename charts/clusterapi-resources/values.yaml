@@ -137,3 +137,17 @@ extraResourcesSecrets:
 #       name: extra-secret
 #     stringData:
 #       secretKey: secretValue
+
+# Creates bigip-ctrl AS3 configmap for kubeapi endpoint with manual list of pool members
+bigipCtrlAS3:
+  enabled: false
+  # vs:
+  #   address: 10.0.12.1
+  #   port: 6443
+  # pool:
+  #   port: 6443
+  #   members:
+  #   - 10.1.1.10
+  #   - 10.1.1.12
+  #   - 10.1.1.13
+  #   - 10.1.1.14
