@@ -1,0 +1,44 @@
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+kind: KubeadmControlPlane
+metadata:
+  name: {{ .Values.cluster.name }}
+spec:
+  kubeadmConfigSpec:
+    clusterConfiguration:
+      apiServer:
+        extraArgs:
+          cloud-provider: external
+      controllerManager:
+        extraArgs:
+          cloud-provider: external
+{{- with .Values.kubeadmConfigSpec.files }}
+    files:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+    initConfiguration:
+      nodeRegistration:
+        criSocket: /var/run/containerd/containerd.sock
+        kubeletExtraArgs:
+          cloud-provider: external
+        name: '{{`{{ local_hostname }}`}}'
+    joinConfiguration:
+      nodeRegistration:
+        criSocket: /var/run/containerd/containerd.sock
+        kubeletExtraArgs:
+          cloud-provider: external
+        name: '{{`{{ local_hostname }}`}}'
+    preKubeadmCommands:
+    {{- toYaml .Values.kubeadmConfigSpec.preKubeadmCommands | nindent 4 }}
+    users:
+    - name: capv
+      sshAuthorizedKeys:
+      {{- toYaml .Values.kubeadmConfigSpec.sshAuthorizedKeys | nindent 6 }}
+      sudo: ALL=(ALL) NOPASSWD:ALL
+  machineTemplate:
+    infrastructureRef:
+      apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+      kind: VSphereMachineTemplate
+      name: {{ .Values.kubeadmControlPlane.template }}
+  replicas: {{ .Values.kubeadmControlPlane.replicas }}
+  version: {{ .Values.kubeadmControlPlane.version }}

@@ -1,0 +1,139 @@
+# Default values for clusterapi-resources.
+# This is a YAML-formatted file.
+
+cluster:
+  name: cluster
+  network:
+    pods:
+      cidrBlocks:
+      - 10.68.0.0/19
+    services:
+      cidrBlocks:
+      - 10.68.32.0/19
+
+vsphereCluster:
+  controlPlaneEndpoint:
+    host: kubeapi.domain.com
+    port: 6443
+  server: vcenter.address
+  thumbprint: ""
+  username: username
+  password: password
+  datacenter: DATACENTER
+  publicNetwork: network
+  insecure: true
+  csi:
+    enabled: true
+  cpi:
+    enabled: true
+
+vsphereMachineTemplate:
+  defaults:
+    spec:
+      cloneMode: linkedClone
+      datastore: DATASTORE
+      diskGiB: 50
+      folder: FOLDER
+      memoryMiB: 8192
+      network:
+        devices:
+        - addressesFromPools:
+          - apiGroup: ipam.cluster.x-k8s.io
+            kind: InClusterIPPool
+            name: control-plane-pool
+          nameservers:
+          - 10.1.12.153
+          - 10.0.12.153
+          networkName: 160_FOLDER
+      numCPUs: 4
+      os: Linux
+      powerOffMode: trySoft
+      resourcePool: /DATACENTER/host/HQ-Cluster/Resources/PAC/Prod
+      storagePolicyName: ""
+      template: ubuntu-2204-kube-v1.30.0
+  # list of VSphereMachineTemplates to be created overriding the defaults above if desired
+  templates: []
+  # - name: template-name
+  #   spec:
+  #     diskGiB: 50
+  #     memoryMiB: 8192
+  #     network:
+  #       devices:
+  #       - dhcp4: true
+  #         mtu: 9000
+  #         networkName: 225_iSCSI
+  #     numCPUs: 4
+  #     template: ubuntu-2204-kube-v1.30.0
+
+kubeadmConfigSpec:
+  preKubeadmCommands:
+  - hostnamectl set-hostname "{{ ds.meta_data.hostname }}"
+  - echo "::1         ipv6-localhost ipv6-loopback localhost6 localhost6.localdomain6" >/etc/hosts
+  - echo "127.0.0.1   {{ ds.meta_data.hostname }} {{ local_hostname }} localhost localhost.localdomain localhost4 localhost4.localdomain4" >>/etc/hosts
+  - mkdir -p /etc/pre-kubeadm-commands
+  - for script in $(find /etc/pre-kubeadm-commands/ -name '*.sh' -type f | sort); do echo "Running script $script"; "$script"; done
+  sshAuthorizedKeys:
+  - ssh-rsa AAA
+  # files:
+  # - content: |
+  #     version = 2
+
+  #     imports = ["/etc/containerd/conf.d/*.toml"]
+
+  #     [plugins]
+  #       [plugins."io.containerd.grpc.v1.cri"]
+  #         sandbox_image = "registry.k8s.io/pause:3.9"
+  #       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  #         runtime_type = "io.containerd.runc.v2"
+  #       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+  #         SystemdCgroup = true
+  #       [plugins."io.containerd.grpc.v1.cri".registry]
+  #         config_path = "/etc/containerd/certs.d"
+  #   owner: root:root
+  #   path: /etc/containerd/config.toml
+  #   permissions: "0644"
+
+kubeadmControlPlane:
+  replicas: 1
+  template: template-name
+  version: v1.30.0
+
+machineDeployments:
+- name: md-0
+  replicas: 1
+  template: template-name
+  version: v1.30.0
+
+# If using InClusterIPAM can define list of InClusterIPPools
+inClusterIPPool: []
+# - name: control-plane-pool
+#   spec:
+#     addresses:
+#       - 10.1.1.10-10.1.1.20
+#     prefix: 24
+#     gateway: 10.1.1.1
+# - name: worker-pool
+#   spec:
+#     addresses:
+#       - 10.1.1.21-10.1.1.40
+#     prefix: 24
+#     gateway: 10.1.1.1
+
+extraResourcesConfigmaps:
+# - name: extra-configmap
+#   data: |-
+#     apiVersion: v1
+#     kind: Namespace
+#     metadata:
+#       name: extra-namespace
+
+
+extraResourcesSecrets:
+# - name: extra-secret
+#   data: |-
+#     apiVersion: v1
+#     kind: Secret
+#     metadata:
+#       name: extra-secret
+#     stringData:
+#       secretKey: secretValue

@@ -1,0 +1,33 @@
+{{- $values := .Values }}
+{{- if .Values.machineDeployments }}
+{{- range $md := .Values.machineDeployments }}
+---
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: MachineDeployment
+metadata:
+  labels:
+    cluster.x-k8s.io/cluster-name: {{ $values.cluster.name }}
+  name: {{ $values.cluster.name }}-{{ $md.name }}
+spec:
+  clusterName: {{ $values.cluster.name }}
+  replicas: {{ $md.replicas }}
+  selector:
+    matchLabels: {}
+  template:
+    metadata:
+      labels:
+        cluster.x-k8s.io/cluster-name: {{ $values.cluster.name }}
+    spec:
+      bootstrap:
+        configRef:
+          apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+          kind: KubeadmConfigTemplate
+          name: {{ $values.cluster.name }}-{{ $md.name }}
+      clusterName: {{ $values.cluster.name }}
+      infrastructureRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        kind: VSphereMachineTemplate
+        name: {{ $md.template }}
+      version: {{ $md.version }}
+{{- end }}
+{{- end }}

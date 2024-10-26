@@ -1,0 +1,12 @@
+{{- if .Values.extraResourcesConfigmaps }}
+{{- range $cm := .Values.extraResourcesConfigmaps }}
+---
+apiVersion: v1
+data:
+  data: |-
+    {{- $cm.data | nindent 4 }}
+kind: ConfigMap
+metadata:
+  name: {{ $cm.name }}
+{{- end }}
+{{- end }}

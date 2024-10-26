@@ -1,0 +1,30 @@
+{{- $values := .Values }}
+{{- $defaultSpec := .Values.vsphereMachineTemplate.defaults.spec }}
+{{- if .Values.vsphereMachineTemplate.templates }}
+{{- range $t := .Values.vsphereMachineTemplate.templates }}
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: VSphereMachineTemplate
+metadata:
+  name: {{ $t.name }}
+spec:
+  template:
+    spec:
+      cloneMode: {{ $t.spec.cloneMode | default $defaultSpec.cloneMode }}
+      datacenter: {{ $t.spec.datacenter | default $values.vsphereCluster.datacenter }}
+      datastore: {{ $t.spec.datastore | default $defaultSpec.datastore }}
+      diskGiB: {{ $t.spec.diskGiB | default $defaultSpec.diskGiB }}
+      folder: {{ $t.spec.folder | default $defaultSpec.folder }}
+      memoryMiB: {{ $t.spec.memoryMiB | default $defaultSpec.memoryMiB }}
+      network:
+        {{- toYaml ($t.spec.network | default $defaultSpec.network) | nindent 8 }}
+      numCPUs: {{ $t.spec.numCPUs | default $defaultSpec.numCPUs }}
+      os: {{ $t.spec.os | default $defaultSpec.os }}
+      powerOffMode: {{ $t.spec.powerOffMode | default $defaultSpec.powerOffMode }}
+      resourcePool: {{ $t.spec.resourcePool | default $defaultSpec.resourcePool }}
+      server: {{ $t.spec.server | default $values.vsphereCluster.server }}
+      storagePolicyName: "{{ $t.spec.storagePolicyName | default $defaultSpec.storagePolicyName }}"
+      template: {{ $t.spec.template | default $defaultSpec.template }}
+      thumbprint: "{{ $t.spec.thumbprint | default $values.vsphereCluster.thumbprint }}"
+{{- end }}
+{{- end }}

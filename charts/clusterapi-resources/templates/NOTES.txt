@@ -1,0 +1,13 @@
+{{- $values := .Values}}
+Cluster {{ .Values.cluster.name }} deployed.
+- Control plane endpoint: {{ .Values.vsphereCluster.controlPlaneEndpoint.host }}:{{ .Values.vsphereCluster.controlPlaneEndpoint.port }}
+- Control Plane
+  - replicas: {{ .Values.kubeadmControlPlane.replicas }}
+  - template: {{ .Values.kubeadmControlPlane.template }}
+  - version: {{ .Values.kubeadmControlPlane.version }}
+{{- range $md := .Values.machineDeployments }}
+- Workers {{ $values.cluster.name }}-{{ $md.name }}
+  - replicas: {{ $md.replicas }}
+  - template: {{ $md.template }}
+  - version: {{ $md.version }}
+{{- end }}
