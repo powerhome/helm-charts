@@ -5,6 +5,7 @@ metadata:
   labels:
     cluster.x-k8s.io/cluster-name: {{ .Values.cluster.name }}
   name: {{ .Values.cluster.name }}-crs-0
+  namespace: {{ $.Release.Namespace }}
 spec:
   clusterSelector:
     matchLabels:

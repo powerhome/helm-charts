@@ -5,6 +5,7 @@ apiVersion: ipam.cluster.x-k8s.io/v1alpha2
 kind: InClusterIPPool
 metadata:
   name: {{ $pool.name }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   {{- toYaml $pool.spec | nindent 2 }}
 {{- end }}

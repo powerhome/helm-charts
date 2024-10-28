@@ -8,5 +8,6 @@ data:
 kind: ConfigMap
 metadata:
   name: {{ $cm.name }}
+  namespace: {{ $.Release.Namespace }}
 {{- end }}
 {{- end }}

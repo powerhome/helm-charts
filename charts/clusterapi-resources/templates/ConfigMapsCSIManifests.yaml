@@ -846,3 +846,4 @@ data:
 kind: ConfigMap
 metadata:
   name: csi-manifests
+  namespace: {{ $.Release.Namespace }}

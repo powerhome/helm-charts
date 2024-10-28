@@ -3,6 +3,7 @@ apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: VSphereCluster
 metadata:
   name: {{ .Values.cluster.name }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   controlPlaneEndpoint:
     host: {{ .Values.vsphereCluster.controlPlaneEndpoint.host }}

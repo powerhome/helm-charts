@@ -1,4 +1,3 @@
-{{- $values := .Values }}
 {{- if .Values.machineDeployments }}
 {{- range $md := .Values.machineDeployments }}
 ---
@@ -6,24 +5,25 @@ apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachineDeployment
 metadata:
   labels:
-    cluster.x-k8s.io/cluster-name: {{ $values.cluster.name }}
-  name: {{ $values.cluster.name }}-{{ $md.name }}
+    cluster.x-k8s.io/cluster-name: {{ $.Values.cluster.name }}
+  name: {{ $.Values.cluster.name }}-{{ $md.name }}
+  namespace: {{ $.Release.Namespace }}
 spec:
-  clusterName: {{ $values.cluster.name }}
+  clusterName: {{ $.Values.cluster.name }}
   replicas: {{ $md.replicas }}
   selector:
     matchLabels: {}
   template:
     metadata:
       labels:
-        cluster.x-k8s.io/cluster-name: {{ $values.cluster.name }}
+        cluster.x-k8s.io/cluster-name: {{ $.Values.cluster.name }}
     spec:
       bootstrap:
         configRef:
           apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
           kind: KubeadmConfigTemplate
-          name: {{ $values.cluster.name }}-{{ $md.name }}
-      clusterName: {{ $values.cluster.name }}
+          name: {{ $.Values.cluster.name }}-{{ $md.name }}
+      clusterName: {{ $.Values.cluster.name }}
       infrastructureRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: VSphereMachineTemplate

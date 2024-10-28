@@ -221,6 +221,7 @@ data:
 kind: ConfigMap
 metadata:
   name: cpi-manifests
+  namespace: {{ $.Release.Namespace }}
 ---
 apiVersion: v1
 data:
@@ -248,4 +249,5 @@ data:
       namespace: kube-system
 kind: ConfigMap
 metadata:
-    name: cpi-manifests-cloud-config
+  name: cpi-manifests-cloud-config
+  namespace: {{ $.Release.Namespace }}
