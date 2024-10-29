@@ -1,0 +1,30 @@
+{{- if .Values.machineDeployments }}
+{{- range $md := .Values.machineDeployments }}
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+kind: KubeadmConfigTemplate
+metadata:
+  name: {{ $.Values.cluster.name }}-{{ $md.name}}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  template:
+    spec:
+      joinConfiguration:
+        nodeRegistration:
+          criSocket: /var/run/containerd/containerd.sock
+          kubeletExtraArgs:
+            cloud-provider: external
+          name: '{{`{{ local_hostname }}`}}'
+{{- with $.Values.kubeadmConfigSpec.files }}
+      files:
+      {{- toYaml . | nindent 6 }}
+{{- end }}
+      preKubeadmCommands:
+      {{- toYaml $.Values.kubeadmConfigSpec.preKubeadmCommands | nindent 6 }}
+      users:
+      - name: capv
+        sshAuthorizedKeys:
+        {{- toYaml $.Values.kubeadmConfigSpec.sshAuthorizedKeys | nindent 8 }}
+        sudo: ALL=(ALL) NOPASSWD:ALL
+{{- end }}
+{{- end }}
