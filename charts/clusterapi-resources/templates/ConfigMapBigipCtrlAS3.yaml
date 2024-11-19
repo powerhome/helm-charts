@@ -1,4 +1,4 @@
-{{- if .Values.bigipCtrlAS3.enabled }}
+{{- if or .Values.bigipCtrlAS3.kubeapi.enabled .Values.bigipCtrlAS3.ingress.enabled }}
 ---
 kind: ConfigMap
 apiVersion: v1
@@ -22,7 +22,8 @@ data:
           "as3": {
             "class": "Application",
             "template": "generic",
-            "webdev_{{ .Values.cluster.name }}_kubeapi_{{ .Values.bigipCtrlAS3.vs.port }}_vs": {
+            {{- if .Values.bigipCtrlAS3.kubeapi.enabled }}
+            "webdev_{{ .Values.cluster.name }}_kubeapi_{{ .Values.bigipCtrlAS3.kubeapi.vs.port }}_vs": {
               "class": "Service_L4",
               "layer4": "tcp",
               "profileL4": {
@@ -31,10 +32,10 @@ data:
               "snat": {
                 "bigip": "/Common/SNATPool"
               },
-              "virtualPort": {{ .Values.bigipCtrlAS3.vs.port }},
+              "virtualPort": {{ .Values.bigipCtrlAS3.kubeapi.vs.port }},
               "remark": "{{ .Values.cluster.name }} kubeapi vs",
               "virtualAddresses": [
-                "{{ .Values.bigipCtrlAS3.vs.address }}"
+                "{{ .Values.bigipCtrlAS3.kubeapi.vs.address }}"
               ],
               "pool": "{{ .Values.cluster.name }}_kubeapi_pool"
             },
@@ -45,10 +46,91 @@ data:
               ],
               "members": [
                 {
-                  "servicePort": {{ .Values.bigipCtrlAS3.pool.port }},
-                  "serverAddresses": {{ toJson .Values.bigipCtrlAS3.pool.members }}
+                  "servicePort": {{ .Values.bigipCtrlAS3.kubeapi.pool.port }},
+                  "serverAddresses": {{ toJson .Values.bigipCtrlAS3.kubeapi.pool.members }}
                 }
               ]
+            {{- end }}
+            {{- if and .Values.bigipCtrlAS3.kubeapi.enabled .Values.bigipCtrlAS3.ingress.enabled }}
+            },
+            {{- end }}
+            {{- if .Values.bigipCtrlAS3.ingress.enabled }}
+            "proxy_protocol_iRule": {
+              "class": "iRule",
+              "iRule": "when SERVER_CONNECTED {\n    TCP::respond \"PROXY TCP[IP::version] [IP::client_addr] [clientside {IP::local_addr}] [TCP::client_port] [clientside {TCP::local_port}]\\r\\n\"\n}"
+            },
+            "webdev_{{ .Values.cluster.name }}_ingress_443_vs": {
+              "class": "Service_TCP",
+              "iRules": [
+                "proxy_protocol_iRule"
+              ],
+              "layer4": "tcp",
+              "profileTCP": {
+                "egress": {
+                  "bigip": "/Common/tcp-lan-optimized-power"
+                },
+                "ingress": {
+                  "bigip": "/Common/tcp-mobile-optimized-power"
+                }
+              },
+              "snat": {
+                "bigip": "/Common/SNATPool"
+              },
+              "virtualPort": 443,
+              "remark": "{{ .Values.cluster.name }} ingress vs",
+              "virtualAddresses": [
+                "{{ .Values.bigipCtrlAS3.ingress.vs.address }}"
+              ],
+              "pool": "{{ .Values.cluster.name }}_ingress_pool_30443"
+            },
+            "{{ .Values.cluster.name }}_ingress_pool_30443": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "members": [
+                {
+                  "servicePort": 30443,
+                  "serverAddresses": {{ toJson .Values.bigipCtrlAS3.ingress.pool.members }}
+                }
+              ]
+            },
+            "webdev_{{ .Values.cluster.name }}_ingress_80_vs": {
+              "class": "Service_TCP",
+              "iRules": [
+                "proxy_protocol_iRule"
+              ],
+              "layer4": "tcp",
+              "profileTCP": {
+                "egress": {
+                  "bigip": "/Common/tcp-lan-optimized-power"
+                },
+                "ingress": {
+                  "bigip": "/Common/tcp-mobile-optimized-power"
+                }
+              },
+              "snat": {
+                "bigip": "/Common/SNATPool"
+              },
+              "virtualPort": 80,
+              "remark": "{{ .Values.cluster.name }} ingress vs",
+              "virtualAddresses": [
+                "{{ .Values.bigipCtrlAS3.ingress.vs.address }}"
+              ],
+              "pool": "{{ .Values.cluster.name }}_ingress_pool_30080"
+            },
+            "{{ .Values.cluster.name }}_ingress_pool_30080": {
+              "class": "Pool",
+              "monitors": [
+                "tcp"
+              ],
+              "members": [
+                {
+                  "servicePort": 30080,
+                  "serverAddresses": {{ toJson .Values.bigipCtrlAS3.ingress.pool.members }}
+                }
+              ]
+            {{- end }}
             }
           }
         }

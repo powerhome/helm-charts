@@ -119,7 +119,7 @@ inClusterIPPool: []
 #     prefix: 24
 #     gateway: 10.1.1.1
 
-extraResourcesConfigmaps:
+extraResourcesConfigmaps: []
 # - name: extra-configmap
 #   data: |-
 #     apiVersion: v1
@@ -128,7 +128,7 @@ extraResourcesConfigmaps:
 #       name: extra-namespace
 
 
-extraResourcesSecrets:
+extraResourcesSecrets: []
 # - name: extra-secret
 #   data: |-
 #     apiVersion: v1
@@ -140,14 +140,25 @@ extraResourcesSecrets:
 
 # Creates bigip-ctrl AS3 configmap for kubeapi endpoint with manual list of pool members
 bigipCtrlAS3:
-  enabled: false
-  # vs:
-  #   address: 10.0.12.1
-  #   port: 6443
-  # pool:
-  #   port: 6443
-  #   members:
-  #   - 10.1.1.10
-  #   - 10.1.1.12
-  #   - 10.1.1.13
-  #   - 10.1.1.14
+  kubeapi:
+    enabled: false
+    # vs:
+    #   address: 10.0.12.1
+    #   port: 6443
+    # pool:
+    #   port: 6443
+    #   members:
+    #   - 10.1.1.10
+    #   - 10.1.1.12
+    #   - 10.1.1.13
+    #   - 10.1.1.14
+  ingress:
+    enabled: false
+    # vs:
+    #   address: 10.0.12.2
+    # pool:
+    #   members:
+    #   - 10.1.1.15
+    #   - 10.1.1.16
+    #   - 10.1.1.17
+    #   - 10.1.1.18
