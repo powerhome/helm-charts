@@ -30,7 +30,7 @@ data:
                 "bigip": "/Common/fastL4"
               },
               "snat": {
-                "bigip": "/Common/SNATPool"
+                "bigip": "{{ .Values.bigipCtrlAS3.snatPool }}"
               },
               "virtualPort": {{ .Values.bigipCtrlAS3.kubeapi.vs.port }},
               "remark": "{{ .Values.cluster.name }} kubeapi vs",
@@ -74,7 +74,7 @@ data:
                 }
               },
               "snat": {
-                "bigip": "/Common/SNATPool"
+                "bigip": "{{ .Values.bigipCtrlAS3.snatPool }}"
               },
               "virtualPort": 443,
               "remark": "{{ .Values.cluster.name }} ingress vs",
@@ -110,7 +110,7 @@ data:
                 }
               },
               "snat": {
-                "bigip": "/Common/SNATPool"
+                "bigip": "{{ .Values.bigipCtrlAS3.snatPool }}"
               },
               "virtualPort": 80,
               "remark": "{{ .Values.cluster.name }} ingress vs",
