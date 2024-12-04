@@ -10,9 +10,15 @@ spec:
       apiServer:
         extraArgs:
           cloud-provider: external
+        {{- with .Values.kubeadmConfigSpec.apiServer.extraArgs }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       controllerManager:
         extraArgs:
           cloud-provider: external
+        {{- with .Values.kubeadmConfigSpec.controllerManager.extraArgs }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
 {{- with .Values.kubeadmConfigSpec.files }}
     files:
     {{- toYaml . | nindent 4 }}
