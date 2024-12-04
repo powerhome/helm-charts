@@ -66,6 +66,16 @@ vsphereMachineTemplate:
   #     template: ubuntu-2204-kube-v1.30.0
 
 kubeadmConfigSpec:
+  ## Extra args for kubeadm apiServer
+  apiServer:
+    extraArgs: {}
+      # extra1: value1
+      # extra2: value2
+  ## Extra args for kubeadm controllerManager
+  controllerManager:
+    extraArgs: {}
+      # extra1: value1
+      # extra2: value2
   preKubeadmCommands:
   - hostnamectl set-hostname "{{ ds.meta_data.hostname }}"
   - echo "::1         ipv6-localhost ipv6-loopback localhost6 localhost6.localdomain6" >/etc/hosts
