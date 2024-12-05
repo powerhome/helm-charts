@@ -13,6 +13,10 @@ spec:
         {{- with .Values.kubeadmConfigSpec.apiServer.extraArgs }}
           {{- toYaml . | nindent 10 }}
         {{- end }}
+        {{- with .Values.kubeadmConfigSpec.apiServer.extraVolumes }}
+        extraVolumes:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       controllerManager:
         extraArgs:
           cloud-provider: external
