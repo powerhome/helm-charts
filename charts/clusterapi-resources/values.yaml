@@ -71,6 +71,16 @@ kubeadmConfigSpec:
     extraArgs: {}
       # extra1: value1
       # extra2: value2
+    extraVolumes: {}
+    # - hostPath: /etc/kubernetes/tokens
+    #   mountPath: /etc/kubernetes/tokens
+    #   name: token-auth-config
+    # - hostPath: /etc/kubernetes/audit-policy
+    #   mountPath: /etc/kubernetes/audit-policy
+    #   name: audit-policy
+    # - hostPath: /var/log/kube-audit
+    #   mountPath: /var/log/audit
+    #   name: audit-logs
   ## Extra args for kubeadm controllerManager
   controllerManager:
     extraArgs: {}
