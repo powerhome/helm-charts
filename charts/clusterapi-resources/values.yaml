@@ -112,6 +112,9 @@ kubeadmConfigSpec:
   #   owner: root:root
   #   path: /etc/containerd/config.toml
   #   permissions: "0644"
+  multipath:
+    enabled: false
+    find_multipaths: no
 
 kubeadmControlPlane:
   replicas: 1
