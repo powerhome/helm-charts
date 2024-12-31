@@ -1,5 +1,4 @@
 {{- if .Values.machineDeployments }}
-{{- $checksum := include (print $.Template.BasePath "/KubeadmConfigTemplate.yaml") . | sha256sum }}
 {{- range $md := .Values.machineDeployments }}
 ---
 apiVersion: cluster.x-k8s.io/v1beta1
@@ -16,8 +15,6 @@ spec:
     matchLabels: {}
   template:
     metadata:
-      annotations:
-        checksum/kubeadmconfig: {{ $checksum }}
       labels:
         cluster.x-k8s.io/cluster-name: {{ $.Values.cluster.name }}
     spec:
