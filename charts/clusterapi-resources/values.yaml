@@ -71,7 +71,7 @@ kubeadmConfigSpec:
     extraArgs: {}
       # extra1: value1
       # extra2: value2
-    extraVolumes: {}
+    extraVolumes: []
     # - hostPath: /etc/kubernetes/tokens
     #   mountPath: /etc/kubernetes/tokens
     #   name: token-auth-config
