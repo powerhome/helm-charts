@@ -34,3 +34,7 @@ spec:
   - kind: Secret
     name: {{ $s.name }}
 {{- end }}
+{{- if .Values.argo.enabled }}
+  - kind: ConfigMap
+    name: add-cluster-to-argo
+{{- end }}

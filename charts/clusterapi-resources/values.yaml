@@ -186,3 +186,15 @@ bigipCtrlAS3:
     #   - 10.1.1.16
     #   - 10.1.1.17
     #   - 10.1.1.18
+
+argo:
+  enabled: false
+  url: https://example.argocd.com
+  auth:
+    token: ""
+  version: 2.13.3
+  labels: []
+    # type: wc # wc or mc; wc workload cluster, mc management cluster
+    # tier: alpha # alpha, beta, prod
+    # datacenter: gm # datacenter location where argo will be deployed
+    # targetRevision: main # branch or tag
