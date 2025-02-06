@@ -19,6 +19,12 @@ data:
       containers:
       - name: alpine
         image: alpine:latest
+        env:
+        - name: ARGOCD_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: argo-auth-token
+              key: token
         command: 
         - "sh"
         args:
@@ -71,7 +77,7 @@ data:
           {{- end }}
 
           argocd --server {{ .Values.argo.url }} \
-                 --auth-token {{ .Values.argo.auth.token }} \
+                 --auth-token $ARGOCD_AUTH_TOKEN \
                  --grpc-web cluster add $KUBERNETES_CONTEXT \
                  --name {{ .Values.cluster.name }} \
                  --cluster-endpoint kube-public \
