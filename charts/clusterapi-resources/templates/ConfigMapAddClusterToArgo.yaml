@@ -18,7 +18,7 @@ data:
       restartPolicy: OnFailure
       containers:
       - name: alpine
-        image: alpine:latest
+        image: alpine:3.21.2
         env:
         - name: ARGOCD_AUTH_TOKEN
           valueFrom:
