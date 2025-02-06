@@ -194,7 +194,4 @@ argo:
     token: ""
   version: 2.13.3
   labels: {}
-    # type: wc # wc or mc; wc workload cluster, mc management cluster
-    # tier: alpha # alpha, beta, prod
-    # datacenter: gm # datacenter location where argo will be deployed
-    # targetRevision: main # branch or tag
+    # labels that will be added to the Kubernetes Clusters managed by ArgoCD
