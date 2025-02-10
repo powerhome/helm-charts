@@ -16,20 +16,27 @@ data:
         app: alpine
     spec:
       restartPolicy: OnFailure
+      serviceAccountName: argo-manager
       containers:
       - name: alpine
         image: alpine:3.21.2
+        resources:
+          requests:
+            memory: 128Mi
+          limits:
+            cpu: 300m
+            memory: 128Mi
         env:
         - name: ARGOCD_AUTH_TOKEN
           valueFrom:
             secretKeyRef:
               name: argo-auth-token
               key: token
-        command: 
+        command:
         - "sh"
         args:
         - "-c"
-        - |
+        - |-
           apk add --no-cache curl
 
           # install argocd cli
@@ -38,37 +45,35 @@ data:
 
           # generate a kubeconfig for current cluster
           KUBERNETES_CONTEXT="inCluster"
-          (
-            SERVICE_ACCOUNT_DIR="/var/run/secrets/kubernetes.io/serviceaccount"
-            KUBERNETES_SERVICE_SCHEME=$(case $KUBERNETES_SERVICE_PORT in 80|8080|8081) echo "http";; *) echo "https"; esac)
-            KUBERNETES_SERVER_URL="$KUBERNETES_SERVICE_SCHEME"://"$KUBERNETES_SERVICE_HOST":"$KUBERNETES_SERVICE_PORT"
-            KUBERNETES_CLUSTER_CA_FILE="$SERVICE_ACCOUNT_DIR"/ca.crt
-            KUBERNETES_NAMESPACE=$(cat "$SERVICE_ACCOUNT_DIR"/namespace)
-            KUBERNETES_USER_TOKEN=$(cat "$SERVICE_ACCOUNT_DIR"/token)
-            mkdir -p "$HOME"/.kube
+          SERVICE_ACCOUNT_DIR="/var/run/secrets/kubernetes.io/serviceaccount"
+          KUBERNETES_SERVICE_SCHEME=$(case $KUBERNETES_SERVICE_PORT in 80|8080|8081) echo "http";; *) echo "https"; esac)
+          KUBERNETES_SERVER_URL="$KUBERNETES_SERVICE_SCHEME"://"$KUBERNETES_SERVICE_HOST":"$KUBERNETES_SERVICE_PORT"
+          KUBERNETES_CLUSTER_CA_FILE="$SERVICE_ACCOUNT_DIR"/ca.crt
+          KUBERNETES_NAMESPACE=$(cat "$SERVICE_ACCOUNT_DIR"/namespace)
+          KUBERNETES_USER_TOKEN=$(cat "$SERVICE_ACCOUNT_DIR"/token)
+          mkdir -p "$HOME"/.kube
 
-            cat > "$HOME"/.kube/config <<EOF
-            apiVersion: v1
-            kind: Config
-            preferences: {}
-            current-context: $KUBERNETES_CONTEXT
-            clusters:
-            - cluster:
-                server: $KUBERNETES_SERVER_URL
-                certificate-authority: $KUBERNETES_CLUSTER_CA_FILE
-              name: $KUBERNETES_CONTEXT
-            users:
-            - name: podServiceAccount
-              user:
-                token: $KUBERNETES_USER_TOKEN
-            contexts:
-            - context:
-                cluster: $KUBERNETES_CONTEXT
-                user: podServiceAccount
-                namespace: $KUBERNETES_NAMESPACE
-              name: $KUBERNETES_CONTEXT
-            EOF
-          )
+          cat > "$HOME"/.kube/config <<EOF
+          apiVersion: v1
+          kind: Config
+          preferences: {}
+          current-context: $KUBERNETES_CONTEXT
+          clusters:
+          - cluster:
+              server: $KUBERNETES_SERVER_URL
+              certificate-authority: $KUBERNETES_CLUSTER_CA_FILE
+            name: $KUBERNETES_CONTEXT
+          users:
+          - name: podServiceAccount
+            user:
+              token: $KUBERNETES_USER_TOKEN
+          contexts:
+          - context:
+              cluster: $KUBERNETES_CONTEXT
+              user: podServiceAccount
+              namespace: $KUBERNETES_NAMESPACE
+            name: $KUBERNETES_CONTEXT
+          EOF
 
           # add cluster to argo
           {{- $argoLabels := "" }}
@@ -86,11 +91,4 @@ data:
                  {{- end }}
                  --yes
 
-        serviceAccountName: argo-manager
-        resources:
-          requests:
-            memory: 128Mi
-          limits:
-            cpu: 300m
-            memory: 128Mi       
 {{- end }}
