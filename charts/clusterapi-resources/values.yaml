@@ -189,7 +189,11 @@ bigipCtrlAS3:
 
 argo:
   enabled: false
-  url: https://example.argocd.com
+  namespace: argo
+  serviceAccount: # ServiceAccount to be created for the Pod - it will be cluster-admin
+    create: true
+    name: argo-manager
+  url: example.argocd.com # don't add the protocol
   auth:
     token: ""
   version: 2.13.3
