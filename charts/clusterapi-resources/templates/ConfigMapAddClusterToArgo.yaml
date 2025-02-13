@@ -58,11 +58,44 @@ data:
         args:
         - "-c"
         - |-
+          set -x
           apk add --no-cache curl
 
           # install ArgoCD cli
           curl -sSLo /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v{{ .Values.argo.version }}/argocd-linux-amd64
           chmod +x /usr/local/bin/argocd
+
+          # generate a kubeconfig for current cluster - ArgoCD CLI doesn't support inCluster kubeconfig
+          KUBERNETES_CONTEXT="inCluster"
+          SERVICE_ACCOUNT_DIR="/var/run/secrets/kubernetes.io/serviceaccount"
+          KUBERNETES_SERVICE_SCHEME=$(case $KUBERNETES_SERVICE_PORT in 80|8080|8081) echo "http";; *) echo "https"; esac)
+          KUBERNETES_SERVER_URL="$KUBERNETES_SERVICE_SCHEME"://"$KUBERNETES_SERVICE_HOST":"$KUBERNETES_SERVICE_PORT"
+          KUBERNETES_CLUSTER_CA_FILE="$SERVICE_ACCOUNT_DIR"/ca.crt
+          KUBERNETES_NAMESPACE=$(cat "$SERVICE_ACCOUNT_DIR"/namespace)
+          KUBERNETES_USER_TOKEN=$(cat "$SERVICE_ACCOUNT_DIR"/token)
+          mkdir -p "$HOME"/.kube
+
+          cat > "$HOME"/.kube/config <<EOF
+          apiVersion: v1
+          kind: Config
+          preferences: {}
+          current-context: $KUBERNETES_CONTEXT
+          clusters:
+          - cluster:
+              server: $KUBERNETES_SERVER_URL
+              certificate-authority: $KUBERNETES_CLUSTER_CA_FILE
+            name: $KUBERNETES_CONTEXT
+          users:
+          - name: podServiceAccount
+            user:
+              token: $KUBERNETES_USER_TOKEN
+          contexts:
+          - context:
+              cluster: $KUBERNETES_CONTEXT
+              user: podServiceAccount
+              namespace: $KUBERNETES_NAMESPACE
+            name: $KUBERNETES_CONTEXT
+          EOF
 
           # generate labels to be added to the cluster at ArgoCD
           {{- $argoLabels := "" }}
