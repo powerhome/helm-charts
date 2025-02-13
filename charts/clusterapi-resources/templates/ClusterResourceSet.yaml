@@ -34,7 +34,7 @@ spec:
   - kind: Secret
     name: {{ $s.name }}
 {{- end }}
-{{- if .Values.cni.enabled }}
+{{- if .Values.cni.install }}
   - kind: ConfigMap
     name: cni-installation
 {{- end }}
