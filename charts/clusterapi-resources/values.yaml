@@ -187,6 +187,7 @@ bigipCtrlAS3:
     #   - 10.1.1.17
     #   - 10.1.1.18
 
+# Configuration to make a cluster join an ArgoCD deployment
 argo:
   enabled: false
   namespace: argo
@@ -199,3 +200,8 @@ argo:
   version: 2.13.3
   labels: {}
     # labels that will be added to the Kubernetes Clusters managed by ArgoCD
+
+# basic setup to install a CNI to the cluster
+# this setup will use Helm to install
+cni:
+  install: false

@@ -34,6 +34,10 @@ spec:
   - kind: Secret
     name: {{ $s.name }}
 {{- end }}
+{{- if .Values.cni.enabled }}
+  - kind: ConfigMap
+    name: cni-installation
+{{- end }}
 {{- if .Values.argo.enabled }}
   - kind: ConfigMap
     name: add-cluster-to-argo
