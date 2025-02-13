@@ -24,6 +24,10 @@ spec:
       resourcePool: {{ $t.spec.resourcePool | default $defaultSpec.resourcePool }}
       server: {{ $t.spec.server | default $.Values.vsphereCluster.server }}
       storagePolicyName: "{{ $t.spec.storagePolicyName | default $defaultSpec.storagePolicyName }}"
+    {{- if and $t.spec.tagIDs (gt (len $t.spec.tagIDs) 0)  }}
+      tagIDs:
+      {{- toYaml ($t.spec.tagIDs | default $defaultSpec.tagIDs) | nindent 6 }}
+    {{- end }}
       template: {{ $t.spec.template | default $defaultSpec.template }}
       thumbprint: "{{ $t.spec.thumbprint | default $.Values.vsphereCluster.thumbprint }}"
 {{- end }}
