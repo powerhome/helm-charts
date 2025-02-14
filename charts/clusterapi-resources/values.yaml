@@ -117,6 +117,10 @@ kubeadmConfigSpec:
     enabled: false
     find_multipaths: no
 
+  initConfiguration:
+    skipPhases: []
+    # List of phases to skip - `kubeadm init --help` for more info
+
 kubeadmControlPlane:
   replicas: 1
   template: template-name

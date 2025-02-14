@@ -33,6 +33,10 @@ spec:
         kubeletExtraArgs:
           cloud-provider: external
         name: '{{`{{ local_hostname }}`}}'
+{{- with .Values.kubeadmConfigSpec.initConfiguration.skipPhases }}
+      skipPhases:
+      {{- toYaml . | nindent 6 }}
+{{- end }}
     joinConfiguration:
       nodeRegistration:
         criSocket: /var/run/containerd/containerd.sock
