@@ -207,6 +207,6 @@ argo:
     # labels that will be added to the Kubernetes Clusters managed by ArgoCD
 
 # basic setup to install a CNI to the cluster
-# this setup will use Helm to install
+# this will apply Cilium CNI resources (they were templated out of the chart, check comments in templates/ConfigMapCniInstallation.yaml)
 cni:
   install: false

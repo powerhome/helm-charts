@@ -11,6 +11,7 @@ data:
     # `helm repo update`
     # `helm template cilium cilium/cilium --version 1.17.1 -n kube-system --set hubble.enabled=false`
     # the disabled options aren't needed for the purpose of making the nodes Ready (also Hubble deploys some certificates and they would be plain text here)
+    # they were generated because we couldn't use the same approach for Argo, since the nodes isn't Ready when this is being applied
     ---
     # Source: cilium/templates/cilium-secrets-namespace.yaml
     apiVersion: v1

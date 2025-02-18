@@ -34,12 +34,12 @@ data:
       name: initial-cluster-setup
       namespace: {{ .Values.argo.namespace }}
       labels:
-        app: alpine
+        app: argo-initial-cluster-setup
     spec:
       restartPolicy: OnFailure
       serviceAccountName: {{ .Values.argo.serviceAccount.name }}
       containers:
-      - name: alpine
+      - name: argo-initial-cluster-setup
         image: alpine:3.21.2
         resources:
           requests:
