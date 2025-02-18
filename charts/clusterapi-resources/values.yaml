@@ -72,7 +72,7 @@ kubeadmConfigSpec:
     extraArgs: {}
       # extra1: value1
       # extra2: value2
-    extraVolumes: {}
+    extraVolumes: []
     # - hostPath: /etc/kubernetes/tokens
     #   mountPath: /etc/kubernetes/tokens
     #   name: token-auth-config
@@ -116,6 +116,10 @@ kubeadmConfigSpec:
   multipath:
     enabled: false
     find_multipaths: no
+
+  initConfiguration:
+    skipPhases: []
+    # List of phases to skip - `kubeadm init --help` for more info
 
 kubeadmControlPlane:
   replicas: 1
@@ -187,3 +191,22 @@ bigipCtrlAS3:
     #   - 10.1.1.16
     #   - 10.1.1.17
     #   - 10.1.1.18
+
+# Configuration to make a cluster join an ArgoCD deployment
+argo:
+  enabled: false
+  namespace: argo
+  serviceAccount: # ServiceAccount to be created for the Pod - it will be cluster-admin
+    create: true
+    name: argo-manager
+  url: example.argocd.com # don't add the protocol
+  auth:
+    token: ""
+  version: 2.13.3
+  labels: {}
+    # labels that will be added to the Kubernetes Clusters managed by ArgoCD
+
+# basic setup to install a CNI to the cluster
+# this will apply Cilium CNI resources (they were templated out of the chart, check comments in templates/ConfigMapCniInstallation.yaml)
+cni:
+  install: false
