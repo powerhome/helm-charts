@@ -116,6 +116,7 @@ kubeadmConfigSpec:
   multipath:
     enabled: false
     find_multipaths: no
+    reload_multipath_command: systemctl restart multipathd
 
   initConfiguration:
     skipPhases: []

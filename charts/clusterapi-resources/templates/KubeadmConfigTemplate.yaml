@@ -76,6 +76,9 @@ spec:
 {{- end }}
       preKubeadmCommands:
       {{- toYaml $.Values.kubeadmConfigSpec.preKubeadmCommands | nindent 6 }}
+      {{- if $.Values.kubeadmConfigSpec.multipath.enabled }}
+      - {{ $.Values.kubeadmConfigSpec.multipath.reload_multipath_command }}
+      {{- end }}
       users:
       - name: capv
         sshAuthorizedKeys:
