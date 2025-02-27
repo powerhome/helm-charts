@@ -7,7 +7,7 @@ metadata:
 data:
   data: |-
     {{- if not (eq .Values.cni.customData "") }}
-      {{ toJson .Values.cni.customData | nindent 6 }}
+      {{- toYaml .Values.cni.customData | nindent 6 }}
     {{- else }}
     # generated with the following commands:
     # `helm repo add cilium https://helm.cilium.io/`
