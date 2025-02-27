@@ -211,3 +211,4 @@ argo:
 # this will apply Cilium CNI resources (they were templated out of the chart, check comments in templates/ConfigMapCniInstallation.yaml)
 cni:
   install: false
+  customData: ""
