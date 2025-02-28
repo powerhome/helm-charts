@@ -196,6 +196,7 @@ bigipCtrlAS3:
 # Configuration to make a cluster join an ArgoCD deployment
 argo:
   enabled: false
+  upsert: false # if true, will override the cluster in ArgoCD if it already exists
   namespace: argo
   serviceAccount: # ServiceAccount to be created for the Pod - it will be cluster-admin
     create: true

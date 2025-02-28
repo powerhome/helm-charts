@@ -112,6 +112,9 @@ data:
                  {{- if .Values.argo.labels }}
                  {{ $argoLabels }} \
                  {{- end }}
+                 {{- if .Values.argo.upsert }}
+                 --upsert
+                 {{- end }}
                  --yes
 
 {{- end }}
