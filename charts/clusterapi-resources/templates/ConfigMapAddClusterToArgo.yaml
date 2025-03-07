@@ -113,7 +113,7 @@ data:
                  {{ $argoLabels }} \
                  {{- end }}
                  {{- if .Values.argo.upsert }}
-                 --upsert
+                 --upsert \
                  {{- end }}
                  --yes
 
