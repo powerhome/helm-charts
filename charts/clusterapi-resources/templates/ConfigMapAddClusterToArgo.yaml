@@ -59,7 +59,7 @@ data:
         - "-c"
         - |-
           set -x
-          apk add --no-cache curl gawk
+          apk add --no-cache curl
 
           # install ArgoCD cli
           curl -sSLo /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v{{ .Values.argo.version }}/argocd-linux-amd64
