@@ -103,6 +103,13 @@ data:
             {{- $argoLabels = printf "%s --label %s=%s" $argoLabels $key $value }}
           {{- end }}
 
+          {{- if .Values.argo.upsert }}
+          # remove cluster from ArgoCD if it already exists
+          if argocd --server {{ .Values.argo.url }} --auth-token $ARGOCD_AUTH_TOKEN --grpc-web cluster list | grep -q {{ .Values.cluster.name }}; then
+            argocd --server {{ .Values.argo.url }} --auth-token $ARGOCD_AUTH_TOKEN --grpc-web cluster rm {{ .Values.cluster.name }} --yes
+          fi
+          {{- end }}
+
           # add cluster to ArgoCD
           argocd --server {{ .Values.argo.url }} \
                  --auth-token $ARGOCD_AUTH_TOKEN \
