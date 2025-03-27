@@ -47,6 +47,7 @@ vsphereMachineTemplate:
           networkName: 160_FOLDER
       numCPUs: 4
       os: Linux
+      pciDevices: []
       powerOffMode: trySoft
       resourcePool: /DATACENTER/host/HQ-Cluster/Resources/PAC/Prod
       storagePolicyName: ""

@@ -20,6 +20,7 @@ spec:
         {{- toYaml ($t.spec.network | default $defaultSpec.network) | nindent 8 }}
       numCPUs: {{ $t.spec.numCPUs | default $defaultSpec.numCPUs }}
       os: {{ $t.spec.os | default $defaultSpec.os }}
+      os: {{ $t.spec.pciDevices | default $defaultSpec.pciDevices }}
       powerOffMode: {{ $t.spec.powerOffMode | default $defaultSpec.powerOffMode }}
       resourcePool: {{ $t.spec.resourcePool | default $defaultSpec.resourcePool }}
       server: {{ $t.spec.server | default $.Values.vsphereCluster.server }}
