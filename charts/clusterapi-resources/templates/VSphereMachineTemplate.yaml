@@ -28,6 +28,10 @@ spec:
       tagIDs:
       {{- toYaml ($t.spec.tagIDs | default $defaultSpec.tagIDs) | nindent 6 }}
     {{- end }}
+    {{- if and $t.spec.pciDevices (gt (len $t.spec.pciDevices) 0)  }}
+      pciDevices:
+      {{- toYaml ($t.spec.pciDevices | default $defaultSpec.pciDevices) | nindent 6 }}
+    {{- end }}
       template: {{ $t.spec.template | default $defaultSpec.template }}
       thumbprint: "{{ $t.spec.thumbprint | default $.Values.vsphereCluster.thumbprint }}"
 {{- end }}
