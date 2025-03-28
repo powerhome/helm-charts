@@ -52,6 +52,7 @@ vsphereMachineTemplate:
       storagePolicyName: ""
       tagIDs: []
       pciDevices: []
+      customVMXKeys: {}
       template: ubuntu-2204-kube-v1.30.0
   # list of VSphereMachineTemplates to be created overriding the defaults above if desired
   templates: []
