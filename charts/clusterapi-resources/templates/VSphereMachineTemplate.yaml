@@ -32,6 +32,10 @@ spec:
       pciDevices:
       {{- toYaml ($t.spec.pciDevices | default $defaultSpec.pciDevices) | nindent 6 }}
     {{- end }}
+    {{- if $t.spec.customVMXKeys }}
+      customVMXKeys:
+      {{- toYaml ($t.spec.customVMXKeys | default $defaultSpec.customVMXKeys) | nindent 8 }}
+    {{- end }}
       template: {{ $t.spec.template | default $defaultSpec.template }}
       thumbprint: "{{ $t.spec.thumbprint | default $.Values.vsphereCluster.thumbprint }}"
 {{- end }}
