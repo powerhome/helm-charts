@@ -1,0 +1,17 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-label-to-pods
+spec:
+  rules:
+    - name: add-label
+      match:
+        resources:
+          kinds:
+            - Pod
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            labels:
+              {{- toYaml .Values.labels | nindent 14 }}
