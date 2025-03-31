@@ -17,7 +17,7 @@ spec:
           name: '{{`{{ local_hostname }}`}}'
         {{- if and $md.taints (gt (len $md.taints) 0) }}
           taints:
-          {{- toYaml ( $md.taints | default list ) | nindent 10 }}
+          {{- toYaml $md.taints | nindent 10 }}
         {{- end}}
 {{- with $.Values.kubeadmConfigSpec.files }}
       files:
