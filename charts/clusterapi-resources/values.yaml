@@ -134,6 +134,7 @@ machineDeployments:
   replicas: 1
   template: template-name
   version: v1.30.0
+  taints: []
 
 # If using InClusterIPAM can define list of InClusterIPPools
 inClusterIPPool: []
