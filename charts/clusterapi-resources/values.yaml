@@ -134,7 +134,10 @@ machineDeployments:
   replicas: 1
   template: template-name
   version: v1.30.0
-  taints: []
+  # list of taints that will be added on nodes created by this machineDeployments
+  # taints:
+  #   - effect: NoExecute
+  #     key: nvidia.com/gpu
 
 # If using InClusterIPAM can define list of InClusterIPPools
 inClusterIPPool: []
