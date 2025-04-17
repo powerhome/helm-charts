@@ -142,9 +142,13 @@ machineDeployments:
   # nodeLabels: custom-label=hello-world
   # The deployment strategy to use to replace existing machines with new ones
   # strategy:
-  #   remediation: object
-  #   rollingUpdate: object
-  #   type: string
+  #   remediation:
+  #     maxInFlight: null <Optional int/string>
+  #   rollingUpdate:
+  #     deletePolicy: null <Optional string>
+  #     maxSurge: 1
+  #     maxUnavailable: 0
+  #   type: RollingUpdate
 
 # If using InClusterIPAM can define list of InClusterIPPools
 inClusterIPPool: []
