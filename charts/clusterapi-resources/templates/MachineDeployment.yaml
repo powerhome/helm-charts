@@ -13,6 +13,10 @@ spec:
   replicas: {{ $md.replicas }}
   selector:
     matchLabels: {}
+{{- with $md.strategy }}
+  strategy: 
+  {{- toYaml . | nindent 4 }}
+{{- end }}  
   template:
     metadata:
       labels:
