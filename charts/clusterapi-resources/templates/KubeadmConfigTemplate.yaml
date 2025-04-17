@@ -14,11 +14,14 @@ spec:
           criSocket: /var/run/containerd/containerd.sock
           kubeletExtraArgs:
             cloud-provider: external
+          {{- if $md.node-labels }}
+            node-labels: {{ $md.node-labels}}
+          {{- end }}
           name: '{{`{{ local_hostname }}`}}'
         {{- if and $md.taints (gt (len $md.taints) 0) }}
           taints:
           {{- toYaml $md.taints | nindent 10 }}
-        {{- end}}
+        {{- end }}
 {{- with $.Values.kubeadmConfigSpec.files }}
       files:
       {{- toYaml . | nindent 6 }}
