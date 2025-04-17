@@ -14,8 +14,8 @@ spec:
           criSocket: /var/run/containerd/containerd.sock
           kubeletExtraArgs:
             cloud-provider: external
-          {{- if $md.node-labels }}
-            node-labels: {{ $md.node-labels}}
+          {{- if $md.nodeLabels }}
+            node-labels: {{ $md.nodeLabels}}
           {{- end }}
           name: '{{`{{ local_hostname }}`}}'
         {{- if and $md.taints (gt (len $md.taints) 0) }}
