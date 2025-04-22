@@ -32,6 +32,7 @@ vsphereMachineTemplate:
     spec:
       cloneMode: linkedClone
       datastore: DATASTORE
+      additionalDisksGiB: []
       diskGiB: 50
       folder: FOLDER
       memoryMiB: 8192
