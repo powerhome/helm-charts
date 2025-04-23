@@ -26,6 +26,9 @@ spec:
       files:
       {{- toYaml . | nindent 6 }}
 {{- end }}
+{{- with $.Values.kubeadmConfigSpec.kubeadmConfigTemplateFiles }}
+      {{- toYaml . | nindent 6 }}
+{{- end }}
 {{- if $.Values.kubeadmConfigSpec.multipath.enabled }}
   {{- if lt (len $.Values.kubeadmConfigSpec.files) 1 }}
       files:
