@@ -32,8 +32,11 @@ vsphereMachineTemplate:
     spec:
       cloneMode: linkedClone
       datastore: DATASTORE
-      additionalDisksGiB: []
       diskGiB: 50
+      ## default for additionalDisksGiB is unset but you can specify it as this:
+      # additionalDisksGiB:
+      # - 50
+      # - 100
       folder: FOLDER
       memoryMiB: 8192
       network:
