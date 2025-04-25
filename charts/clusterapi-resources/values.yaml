@@ -33,6 +33,10 @@ vsphereMachineTemplate:
       cloneMode: linkedClone
       datastore: DATASTORE
       diskGiB: 50
+      ## default for additionalDisksGiB is unset but you can specify it as this:
+      # additionalDisksGiB:
+      # - 50
+      # - 100
       folder: FOLDER
       memoryMiB: 8192
       network:
@@ -97,6 +101,13 @@ kubeadmConfigSpec:
   - for script in $(find /etc/pre-kubeadm-commands/ -name '*.sh' -type f | sort); do echo "Running script $script"; "$script"; done
   sshAuthorizedKeys:
   - ssh-rsa AAA
+  ### About FILES ###
+  ## There are 2 ways of adding files to the nodes using this chart:
+  ## 1. Using the "files" attribute will render the files both on KubeadmControlPlane (used
+  ##    for control nodes) and KubeadmConfigTemplate (used for worker nodes) objects.
+  ## 2. Using the "kubeadmConfigTemplateFiles" attribute will render the files only on
+  ##    KubeadmConfigTemplate objects, so only on worker nodes.
+  ##
   # files:
   # - content: |
   #     version = 2
@@ -115,6 +126,13 @@ kubeadmConfigSpec:
   #   owner: root:root
   #   path: /etc/containerd/config.toml
   #   permissions: "0644"
+  #
+  # kubeadmConfigTemplateFiles:
+  # - content: |
+  #     # Some file to be placed only on the worker nodes
+  #   owner: root:root
+  #   path: /etc/pre-kubeadm-commands/00-mkfs-worker.sh
+  #   permissions: "0755"
   multipath:
     enabled: false
     find_multipaths: no

@@ -14,6 +14,9 @@ spec:
       datacenter: {{ $t.spec.datacenter | default $.Values.vsphereCluster.datacenter }}
       datastore: {{ $t.spec.datastore | default $defaultSpec.datastore }}
       diskGiB: {{ $t.spec.diskGiB | default $defaultSpec.diskGiB }}
+    {{- if $t.spec.additionalDisksGiB }}
+      additionalDisksGiB: {{ $t.spec.additionalDisksGiB }}
+    {{- end }}
       folder: {{ $t.spec.folder | default $defaultSpec.folder }}
       memoryMiB: {{ $t.spec.memoryMiB | default $defaultSpec.memoryMiB }}
       network:
