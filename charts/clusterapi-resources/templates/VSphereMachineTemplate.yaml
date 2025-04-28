@@ -18,7 +18,11 @@ spec:
       additionalDisksGiB: {{ $t.spec.additionalDisksGiB }}
     {{- end }}
       folder: {{ $t.spec.folder | default $defaultSpec.folder }}
-      memoryMiB: {{ $t.spec.memoryMiB | default $defaultSpec.memoryMiB }}
+    {{- if $t.spec.specialMemoryMiB }}
+      memoryMiB: 10240
+    {{- else }}
+      memoryMiB: {{ $t.spec.specialMemoryMiB | default $defaultSpec.memoryMiB }}
+    {{- end }}
       network:
         {{- toYaml ($t.spec.network | default $defaultSpec.network) | nindent 8 }}
       numCPUs: {{ $t.spec.numCPUs | default $defaultSpec.numCPUs }}
