@@ -30,8 +30,11 @@ spec:
     initConfiguration:
       nodeRegistration:
         criSocket: /var/run/containerd/containerd.sock
+{{- with $.Values.kubeadmConfigSpec.initConfiguration.kubeletExtraArgs }}
         kubeletExtraArgs:
           cloud-provider: external
+          {{- toYaml . | nindent 10 }}
+{{- end }}
         name: '{{`{{ local_hostname }}`}}'
 {{- with .Values.kubeadmConfigSpec.initConfiguration.skipPhases }}
       skipPhases:
@@ -40,8 +43,11 @@ spec:
     joinConfiguration:
       nodeRegistration:
         criSocket: /var/run/containerd/containerd.sock
+{{- with $.Values.kubeadmConfigSpec.initConfiguration.kubeletExtraArgs }}
         kubeletExtraArgs:
           cloud-provider: external
+          {{- toYaml . | nindent 10 }}
+{{- end }}
         name: '{{`{{ local_hostname }}`}}'
     preKubeadmCommands:
     {{- toYaml .Values.kubeadmConfigSpec.preKubeadmCommands | nindent 4 }}

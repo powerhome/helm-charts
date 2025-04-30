@@ -137,10 +137,14 @@ kubeadmConfigSpec:
     enabled: false
     find_multipaths: no
     reload_multipath_command: systemctl restart multipathd
-
   initConfiguration:
     skipPhases: []
     # List of phases to skip - `kubeadm init --help` for more info
+    # kubeletExtraArgs:
+    #   config: /etc/kubernetes/kubelet-config.yaml
+  # joinConfiguration:
+  #   kubeletExtraArgs:
+  #   config: /etc/kubernetes/kubelet-config.yaml
 
 kubeadmControlPlane:
   replicas: 1
