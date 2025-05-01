@@ -11,14 +11,14 @@ spec:
     spec:
       initConfiguration:
         nodeRegistration:
-          criSocket: /var/run/containerd/containerd.sock
+          criSocket: unix:///var/run/containerd/containerd.sock
 {{- with $.Values.kubeadmConfigSpec.initConfiguration.kubeletExtraArgs }}
           kubeletExtraArgs:
             {{- toYaml . | nindent 12 }}
 {{- end }}
       joinConfiguration:
         nodeRegistration:
-          criSocket: /var/run/containerd/containerd.sock
+          criSocket: unix:///var/run/containerd/containerd.sock
 {{- with $.Values.kubeadmConfigSpec.joinConfiguration.kubeletExtraArgs }}
           kubeletExtraArgs:
             cloud-provider: external
