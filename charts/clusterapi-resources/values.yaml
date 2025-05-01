@@ -140,10 +140,10 @@ kubeadmConfigSpec:
   initConfiguration:
     skipPhases: []
     # List of phases to skip - `kubeadm init --help` for more info
-    # kubeletExtraArgs:
+    kubeletExtraArgs: {}
     #   config: /etc/kubernetes/kubelet-config.yaml
-  # joinConfiguration:
-  #   kubeletExtraArgs:
+  joinConfiguration:
+    kubeletExtraArgs: {}
   #   config: /etc/kubernetes/kubelet-config.yaml
 
 kubeadmControlPlane:
