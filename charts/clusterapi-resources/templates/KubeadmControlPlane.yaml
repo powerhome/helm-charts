@@ -30,7 +30,7 @@ spec:
     initConfiguration:
       nodeRegistration:
         criSocket: unix:///var/run/containerd/containerd.sock
-{{- with $.Values.kubeadmConfigSpec.initConfiguration.kubeletExtraArgs }}
+{{- with $.Values.kubeadmConfigSpec.joinConfiguration.kubeletExtraArgs }}
         kubeletExtraArgs:
           cloud-provider: external
           {{- toYaml . | nindent 10 }}
