@@ -6,6 +6,8 @@ maintainers:
     email: igor.blackman@powerhrg.com
   - name: L30Bola
     email: leonardo.godoy@powerhrg.com
+  - name: dgmorales
+    email: dmorales@powerhrg.com
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives
@@ -19,7 +21,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 1.3.0
+version: 1.4.0
 
 # This is the version of clusterctl used as base to generate the templates
 appVersion: "1.9.6"
