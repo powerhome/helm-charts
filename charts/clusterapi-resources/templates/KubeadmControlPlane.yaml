@@ -32,7 +32,7 @@ spec:
         criSocket: unix:///var/run/containerd/containerd.sock
         kubeletExtraArgs:
           cloud-provider: external
-{{- with $.Values.kubeadmConfigSpec.joinConfiguration.kubeletExtraArgs }}
+{{- with $.Values.kubeadmConfigSpec.initConfiguration.kubeletExtraArgs }}
           {{- toYaml . | nindent 10 }}
 {{- end }}
         name: '{{`{{ local_hostname }}`}}'
@@ -45,7 +45,7 @@ spec:
         criSocket: unix:///var/run/containerd/containerd.sock
         kubeletExtraArgs:
           cloud-provider: external
-{{- with $.Values.kubeadmConfigSpec.initConfiguration.kubeletExtraArgs }}
+{{- with $.Values.kubeadmConfigSpec.joinConfiguration.kubeletExtraArgs }}
           {{- toYaml . | nindent 10 }}
 {{- end }}
         name: '{{`{{ local_hostname }}`}}'
