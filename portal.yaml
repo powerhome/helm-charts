@@ -9,7 +9,7 @@ metadata:
     github.com/project-slug: powerhome/helm-charts
 spec:
   owner: watchtower
-  domain: technology-foundations-and-tools
+  domain: platform
   lifecycle: production
 ---
 apiVersion: backstage.io/v1alpha1
